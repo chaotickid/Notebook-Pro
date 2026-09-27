@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebook Pro Workspace</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- HTML2PDF Library CDN for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Google Fonts for Kalam Handwriting & Inter UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --line-height: 32px; 
+            --margin-left: 80px;
+            --paper-bg: #fcfbf8;
+            --line-blue: #b3d4fc;
+            --line-red: #fca5a5;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Custom Modern Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        /* Always Sticky Frosted Glass Top Formatting Toolbar */
+        .editor-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background-color: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Lined Notebook Container */
+        .notebook-container {
+            width: 100%;
+            max-width: 880px; 
+            background: #fff;
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+            margin: 16px auto 48px auto;
+            position: relative;
+        }
+
+        /* Notebook Spiral Binding Ring Accent Holes */
+        .notebook-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 4px; bottom: 0;
+            width: 24px;
+            background-image: 
+                radial-gradient(circle at 10px 16px, #374151 4px, transparent 5px),
+                linear-gradient(to right, transparent 8px, #cbd5e1 10px, #94a3b8 14px, transparent 16px);
+            background-size: 100% 32px, 100% 100%;
+            background-position: 0 4px, 0 0;
+            border-right: 1px solid rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        /* Lined Paper Background with Kalam Font */
+        .paper-bg {
+            background-color: var(--paper-bg);
+            background-image: 
+                linear-gradient(90deg, transparent calc(var(--margin-left) - 1px), var(--line-red) calc(var(--margin-left) - 1px), var(--line-red) calc(var(--margin-left) + 1px), transparent calc(var(--margin-left) + 1px)),
+                linear-gradient(transparent calc(var(--line-height) - 1px), var(--line-blue) calc(var(--line-height) - 1px), var(--line-blue) var(--line-height), transparent var(--line-height));
+            background-size: 100% 100%, 100% var(--line-height);
+            min-height: 1150px;
+            width: 100%;
+            border-radius: 0 12px 12px 0;
+        }
+
+        #editor {
+            padding-left: calc(var(--margin-left) + 20px);
+            padding-right: 36px;
+            padding-top: 6px; 
+            padding-bottom: 64px;
+            line-height: var(--line-height);
+            font-family: 'Kalam', cursive;
+            font-size: 22px;
+            color: #1e293b;
+            outline: none;
+            min-height: 100%;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #editor img {
+            display: block;
+            max-width: 90%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin: 16px auto;
+        }
+
+        /* Target Element Glowing Pulse Animation on Index Click Scroll */
+        @keyframes targetPulse {
+            0% { 
+                background-color: rgba(59, 130, 246, 0.35); 
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+            }
+            100% { 
+                background-color: transparent; 
+                box-shadow: none;
+            }
+        }
+        .highlight-jump {
+            animation: targetPulse 2s ease-out;
+            border-radius: 4px;
+            display: block;
+        }
+
+        /* Diagram Canvas Styling */
+        .diagram-board {
+            margin: 20px 0;
+            border: 2px dashed #94a3b8;
+            border-radius: 10px;
+            background: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.2;
+            position: relative;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            resize: both;
+            overflow: hidden;
+            height: 380px;
+            min-height: 220px;
+            min-width: 320px;
+        }
+        
+        .diag-toolbar {
+            background: #e2e8f0;
+            padding: 8px 12px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #cbd5e1;
+            flex-shrink: 0;
+        }
+
+        .diag-toolbar button {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: #334155;
+        }
+        
+        .diag-toolbar button:hover { background: #f1f5f9; color: #0f172a; }
+        .diag-toolbar button.active-connect { background: #2563eb; color: white; border-color: #1d4ed8; }
+        .diag-toolbar button.del-board:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+
+        .diag-canvas {
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+            background-size: 20px 20px;
+        }
+
+        .diag-shape {
+            position: absolute;
+            background: #ffffff;
+            border: 2px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            cursor: grab;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-width: 90px;
+            min-height: 44px;
+            z-index: 10;
+            resize: both;
+            overflow: hidden;
+        }
+        
+        .diag-shape:active { cursor: grabbing; }
+        .diag-shape.shape-circle { border-radius: 50%; width: 90px; height: 90px; }
+        .diag-shape.shape-box { border-radius: 8px; }
+        .diag-shape.connect-target-glow { box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5); border-color: #2563eb; }
+
+        .diag-shape span {
+            outline: none;
+            cursor: text;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            width: 100%;
+            word-wrap: break-word;
+            color: #1e293b;
+        }
+
+        .diag-svg-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .diag-label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #475569;
+            pointer-events: auto;
+            z-index: 6;
+            cursor: text;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            outline: none;
+        }
+
+        /* Clean PDF Export CSS Overrides */
+        body.pdf-exporting #sidebar,
+        body.pdf-exporting .editor-toolbar,
+        body.pdf-exporting .diag-toolbar {
+            display: none !important;
+        }
+        body.pdf-exporting .diagram-board {
+            border-color: transparent !important;
+            resize: none !important;
+            background: transparent !important;
+        }
+
+        /* Toast Container */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen w-screen bg-slate-100 overflow-hidden">
+
+    <!-- Left Workspace Sidebar -->
+    <aside id="sidebar" class="w-80 bg-slate-900 text-slate-200 flex flex-col flex-shrink-0 h-full border-r border-slate-800 shadow-xl z-40">
+        
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <h2 class="font-bold text-white text-base tracking-wide">Notebook Pro</h2>
+            </div>
+            <button id="connectFolderBtn" title="Connect Local Workspace Folder" class="p-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors text-xs font-semibold flex items-center gap-1 shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Connect
+            </button>
+        </div>
+
+        <!-- Sidebar Dual Tab Switcher -->
+        <div class="flex border-b border-slate-800 bg-slate-950/40 text-xs font-semibold">
+            <button id="tabFilesBtn" class="flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-blue-400 border-b-2 border-blue-500 transition-all bg-slate-900/60">
+                <span>📁</span>
+                <span>Workspace</span>
+            </button>
+            <button id="tabIndexBtn" class="flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all">
+                <span>📑</span>
+                <span>Index</span>
+                <span id="indexCountBadge" class="bg-blue-900/80 text-blue-300 text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-0.5">0</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: WORKSPACE FILE SYSTEM EXPLORER -->
+        <div id="tabWorkspaceContent" class="flex-grow flex flex-col min-h-0">
+            <!-- Sidebar Action Toolbar -->
+            <div id="sidebarActions" class="p-3 border-b border-slate-800 flex items-center justify-between gap-2 bg-slate-950/40 opacity-50 pointer-events-none transition-opacity">
+                <button id="newFileBtn" class="w-full py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-md text-xs font-semibold flex items-center justify-center gap-1.5 border border-slate-700 transition-colors">
+                    <span>+</span> New Note
+                </button>
+                <button id="refreshTreeBtn" title="Refresh Directory" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs border border-slate-700 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+            </div>
+
+            <!-- Active Folder Banner -->
+            <div id="folderBanner" class="px-4 py-2 text-xs font-medium text-slate-400 bg-slate-950/60 border-b border-slate-800/60 truncate hidden">
+                Folder: <span id="currentFolderName" class="text-blue-400 font-semibold">None</span>
+            </div>
+
+            <!-- File Tree View Container -->
+            <div class="flex-grow overflow-y-auto p-3 space-y-1" id="fileTreeContainer">
+                <div class="text-center py-12 px-4 text-slate-500 text-xs leading-relaxed">
+                    <svg class="w-10 h-10 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Click <strong class="text-slate-400">"Connect"</strong> above to link your local workspace folder.
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DYNAMIC COLLAPSIBLE INDEX OUTLINE -->
+        <div id="tabIndexContent" class="flex-grow flex flex-col min-h-0 hidden">
+            <!-- Index Guide Banner -->
+            <div class="p-3 bg-slate-950/60 border-b border-slate-800 text-[11px] text-slate-400 leading-snug">
+                Type <code class="text-blue-400 font-bold bg-slate-800 px-1 rounded">&gt;&gt; </code> for Primary Headings<br>
+                Type <code class="text-amber-400 font-bold bg-slate-800 px-1 rounded">* </code> for Sub-points under headings.<br>
+                <span class="text-slate-300 font-medium">Click any heading or sub-point to jump directly to it!</span>
+            </div>
+
+            <!-- Outline Tree Scroll Container -->
+            <div id="indexTreeContainer" class="flex-grow overflow-y-auto p-3 space-y-2">
+                <div class="text-center py-12 px-4 text-slate-500 text-xs leading-relaxed">
+                    No headings found yet.<br>Type <span class="text-blue-400 font-semibold">&gt;&gt; Section Name</span> in your notebook to generate dynamic indexes.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar Footer -->
+        <div class="p-3 border-t border-slate-800 text-[11px] text-slate-500 text-center flex items-center justify-between">
+            <span>Notebook Pro</span>
+            <span class="text-slate-600">&bull; Dynamic Outline</span>
+        </div>
+    </aside>
+
+    <!-- Main Content Area with Sticky Header -->
+    <main class="flex-grow flex flex-col h-full min-w-0 bg-slate-200/60 overflow-hidden relative">
+        
+        <!-- ALWAYS STICKY PINNED TOP FORMATTING TOOLBAR -->
+        <header id="main-toolbar" class="editor-toolbar flex-shrink-0 px-6 py-3 flex flex-wrap justify-between items-center gap-4">
+            
+            <div class="flex items-center gap-4 flex-wrap">
+                <!-- Active File Title Display -->
+                <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
+                    <span id="activeDocTitle" class="text-sm font-bold text-slate-800 tracking-tight">collection.html</span>
+                </div>
+
+                <!-- Color Palette Swatches -->
+                <div class="flex items-center gap-1.5">
+                    <button class="color-btn w-5 h-5 rounded-full bg-slate-900 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-slate-400" data-color="#111827" title="Black"></button>
+                    <button class="color-btn w-5 h-5 rounded-full bg-blue-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-blue-400" data-color="#2563eb" title="Blue"></button>
+                    <button class="color-btn w-5 h-5 rounded-full bg-red-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-red-400" data-color="#dc2626" title="Red"></button>
+                    <button class="color-btn w-5 h-5 rounded-full bg-emerald-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-emerald-400" data-color="#16a34a" title="Green"></button>
+                    <button class="color-btn w-5 h-5 rounded-full bg-purple-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-purple-400" data-color="#9333ea" title="Purple"></button>
+                    <button class="color-btn w-5 h-5 rounded-full bg-orange-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-orange-400" data-color="#ea580c" title="Orange"></button>
+                </div>
+                
+                <!-- Text Alignment Commands -->
+                <div class="flex items-center gap-1 border-l border-slate-200 pl-3">
+                    <button class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors" data-align="justifyLeft" title="Align Left">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"></path></svg>
+                    </button>
+                    <button class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors" data-align="justifyCenter" title="Align Center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M4 18h16"></path></svg>
+                    </button>
+                    <button class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors" data-align="justifyRight" title="Align Right">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M4 18h16"></path></svg>
+                    </button>
+                    <button class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors" data-align="justifyFull" title="Justify">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Header Action Buttons -->
+            <div class="flex items-center gap-2">
+                <button id="addDiagramBtn" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    + Diagram
+                </button>
+
+                <button id="saveHtmlBtn" class="flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    💾 Save Note
+                </button>
+
+                <button id="downloadBtn" class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    📥 Export PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Lined Notebook Container -->
+        <div class="flex-grow overflow-y-auto px-4 pb-12 pt-2">
+            <div class="notebook-container" id="pdf-target">
+                <div class="paper-bg">
+                    <div id="editor" contenteditable="true" spellcheck="false"><div>>> Getting Started with Notebook Pro</div><div>* Use '>> ' to trigger primary headings</div><div>* Use '* ' to add nested sub-points</div><div>* Watch the Index tab update live in real-time</div><div><br></div><div>>> Workspace Features</div><div>* Connect local folders using File System Access API</div><div>* Interactive diagrams with resizable shapes & connections</div><div>* Direct clipboard image pasting (Ctrl + V)</div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Modal Input Dialog -->
+    <div id="customModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 max-w-sm w-full shadow-2xl border border-slate-100">
+            <h3 id="modalTitle" class="text-base font-bold text-slate-800 mb-1">Input Needed</h3>
+            <p id="modalDescription" class="text-xs text-slate-500 mb-4">Please enter a value:</p>
+            <input type="text" id="modalInput" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm mb-4 outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end gap-2">
+                <button id="modalCancelBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">Cancel</button>
+                <button id="modalConfirmBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Core UI Elements
+            const editor = document.getElementById('editor');
+            const colorBtns = document.querySelectorAll('.color-btn');
+            const alignBtns = document.querySelectorAll('.align-btn');
+            const addDiagramBtn = document.getElementById('addDiagramBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const saveHtmlBtn = document.getElementById('saveHtmlBtn');
+            const connectFolderBtn = document.getElementById('connectFolderBtn');
+            
+            // Sidebar Tabs Elements
+            const tabFilesBtn = document.getElementById('tabFilesBtn');
+            const tabIndexBtn = document.getElementById('tabIndexBtn');
+            const tabWorkspaceContent = document.getElementById('tabWorkspaceContent');
+            const tabIndexContent = document.getElementById('tabIndexContent');
+            const indexCountBadge = document.getElementById('indexCountBadge');
+            const indexTreeContainer = document.getElementById('indexTreeContainer');
+
+            // Workspace Explorer Elements
+            const fileTreeContainer = document.getElementById('fileTreeContainer');
+            const sidebarActions = document.getElementById('sidebarActions');
+            const newFileBtn = document.getElementById('newFileBtn');
+            const refreshTreeBtn = document.getElementById('refreshTreeBtn');
+            const folderBanner = document.getElementById('folderBanner');
+            const currentFolderName = document.getElementById('currentFolderName');
+            const activeDocTitle = document.getElementById('activeDocTitle');
+            const pdfTarget = document.getElementById('pdf-target');
+
+            // Modal Dialog Elements
+            const customModal = document.getElementById('customModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalInput = document.getElementById('modalInput');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+            // Workspace State
+            let workspaceHandle = null;
+            let currentFileHandle = null;
+            let modalResolver = null;
+            let indexDebounceTimer = null;
+
+            // Toast Helper Message
+            function showMessage(msg, isError = false) {
+                const toast = document.createElement('div');
+                toast.className = `px-4 py-2.5 rounded-lg text-white text-xs font-medium shadow-lg flex items-center gap-2 border transition-all duration-300 ${isError ? 'bg-red-600 border-red-500' : 'bg-slate-800 border-slate-700'}`;
+                toast.innerHTML = `<span>${isError ? '⚠️' : '✅'}</span><span>${msg}</span>`;
+                document.getElementById('toast-container').appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3200);
+            }
+
+            function promptUser(title, description, defaultValue = '') {
+                return new Promise((resolve) => {
+                    modalTitle.innerText = title;
+                    modalDescription.innerText = description;
+                    modalInput.value = defaultValue;
+                    customModal.classList.remove('hidden');
+                    modalInput.focus();
+                    modalInput.select();
+
+                    modalResolver = resolve;
+                });
+            }
+
+            modalCancelBtn.addEventListener('click', () => {
+                customModal.classList.add('hidden');
+                if (modalResolver) modalResolver(null);
+            });
+
+            modalConfirmBtn.addEventListener('click', () => {
+                const val = modalInput.value.trim();
+                customModal.classList.add('hidden');
+                if (modalResolver) modalResolver(val);
+            });
+
+            modalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') modalConfirmBtn.click();
+                if (e.key === 'Escape') modalCancelBtn.click();
+            });
+
+            // Sidebar Tab Switching Logic
+            function switchTab(target) {
+                if (target === 'files') {
+                    tabFilesBtn.className = "flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-blue-400 border-b-2 border-blue-500 transition-all bg-slate-900/60 font-semibold";
+                    tabIndexBtn.className = "flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all font-semibold";
+                    tabWorkspaceContent.classList.remove('hidden');
+                    tabIndexContent.classList.add('hidden');
+                } else {
+                    tabIndexBtn.className = "flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-blue-400 border-b-2 border-blue-500 transition-all bg-slate-900/60 font-semibold";
+                    tabFilesBtn.className = "flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all font-semibold";
+                    tabIndexContent.classList.remove('hidden');
+                    tabWorkspaceContent.classList.add('hidden');
+                    parseDynamicIndex();
+                }
+            }
+
+            tabFilesBtn.addEventListener('click', () => switchTab('files'));
+            tabIndexBtn.addEventListener('click', () => switchTab('index'));
+
+            function parseDynamicIndex() {
+                if (!editor) return;
+
+                // Make sure lines/nodes in editor are accessible as DOM blocks
+                ensureEditorNodesWrapped();
+
+                const nodes = Array.from(editor.childNodes);
+                const indexData = [];
+                let currentHeading = null;
+                let counter = 0;
+
+                nodes.forEach((node) => {
+                    // Ignore elements that aren't valid elements or text wrappers
+                    if (node.nodeType !== Node.ELEMENT_NODE) return;
+                    
+                    const text = node.textContent || '';
+                    const trimmed = text.trim();
+
+                    // Check for Primary Heading: Starts with ">>" or ">> "
+                    const primaryMatch = trimmed.match(/^(?:&gt;&gt;|>>|\u00BB)\s*(.*)/);
+                    // Check for Sub-point: Starts with "*" or "* "
+                    const subMatch = trimmed.match(/^(?:\*|\u2022)\s*(.*)/);
+
+                    if (primaryMatch || subMatch) {
+                        // Assign a unique ID if element doesn't have one
+                        if (!node.id) {
+                            node.id = `idx-node-${Date.now()}-${counter++}`;
+                        }
+
+                        if (primaryMatch) {
+                            const headingTitle = primaryMatch[1] ? primaryMatch[1].trim() : 'Primary Section';
+                            currentHeading = {
+                                id: node.id,
+                                title: headingTitle || 'Untitled Section',
+                                subs: []
+                            };
+                            indexData.push(currentHeading);
+                        } else if (subMatch) {
+                            const subTitle = subMatch[1] ? subMatch[1].trim() : 'Sub point';
+                            const subItem = {
+                                id: node.id,
+                                title: subTitle || 'Untitled Subpoint'
+                            };
+
+                            if (currentHeading) {
+                                currentHeading.subs.push(subItem);
+                            } else {
+                                // Subpoint placed before any primary heading
+                                indexData.push({
+                                    id: node.id,
+                                    title: subTitle || 'Untitled Subpoint',
+                                    isOrphan: true,
+                                    subs: []
+                                });
+                            }
+                        }
+                    }
+                });
+
+                indexCountBadge.innerText = indexData.length;
+                renderIndexTreeUI(indexData);
+            }
+
+            // Ensures loose text lines in editor are wrapped in block divs so scrollIntoView works seamlessly
+            function ensureEditorNodesWrapped() {
+                const childNodes = Array.from(editor.childNodes);
+                childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) {
+                        const wrapper = document.createElement('div');
+                        wrapper.innerText = node.textContent;
+                        editor.replaceChild(wrapper, node);
+                    }
+                });
+            }
+
+            function renderIndexTreeUI(indexData) {
+                if (indexData.length === 0) {
+                    indexTreeContainer.innerHTML = `
+                        <div class="text-center py-12 px-4 text-slate-500 text-xs leading-relaxed">
+                            No headings found yet.<br>Type <span class="text-blue-400 font-semibold">&gt;&gt; Section Name</span> in your notebook to generate dynamic indexes.
+                        </div>`;
+                    return;
+                }
+
+                indexTreeContainer.innerHTML = '';
+                const treeUl = document.createElement('ul');
+                treeUl.className = 'space-y-1.5 text-xs';
+
+                indexData.forEach((item) => {
+                    const li = document.createElement('li');
+                    li.className = 'rounded-lg overflow-hidden bg-slate-950/40 border border-slate-800/80';
+
+                    const hasSubs = item.subs && item.subs.length > 0;
+
+                    const headingRow = document.createElement('div');
+                    headingRow.className = 'flex items-center justify-between p-2 hover:bg-slate-800/80 cursor-pointer text-slate-200 transition-colors group select-none';
+
+                    headingRow.innerHTML = `
+                        <div class="flex items-center gap-2 truncate pr-2 flex-grow min-w-0">
+                            ${hasSubs ? `<button class="toggle-caret p-1 text-slate-400 hover:text-white hover:bg-slate-700/60 rounded transition-colors flex-shrink-0" title="Collapse/Expand">
+                                <svg class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>` : `<span class="w-3.5 h-3.5 inline-block text-blue-400 font-bold text-center flex-shrink-0">•</span>`}
+                            <span class="font-bold text-slate-100 truncate hover:text-blue-400 transition-colors primary-title-text">${item.title}</span>
+                        </div>
+                        ${hasSubs ? `<span class="text-[10px] bg-slate-800 text-slate-400 font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0">${item.subs.length}</span>` : ''}
+                    `;
+
+                    // CLICKING ON PRIMARY HEADING -> SCROLL directly to primary heading element
+                    headingRow.addEventListener('click', (e) => {
+                        // If click was on the toggle caret button, don't trigger scroll
+                        if (e.target.closest('.toggle-caret')) return;
+                        scrollToEditorNode(item.id);
+                    });
+
+                    li.appendChild(headingRow);
+
+                    // Render Sub-points if present
+                    if (hasSubs) {
+                        const subUl = document.createElement('ul');
+                        subUl.className = 'pl-6 pr-2 pb-2 pt-1 space-y-1 text-[11px] text-slate-300 border-t border-slate-800/50 bg-slate-900/40';
+
+                        item.subs.forEach(sub => {
+                            const subLi = document.createElement('li');
+                            subLi.className = 'py-1 px-2 hover:bg-slate-800/90 rounded cursor-pointer flex items-center gap-2 transition-colors hover:text-amber-300 select-none group/sub';
+                            subLi.innerHTML = `<span class="text-amber-400 font-bold flex-shrink-0">*</span><span class="truncate font-medium group-hover/sub:text-amber-200">${sub.title}</span>`;
+                            
+                            // CLICKING ON SUB-POINT -> SCROLL directly to that sub-point element
+                            subLi.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                scrollToEditorNode(sub.id);
+                            });
+
+                            subUl.appendChild(subLi);
+                        });
+
+                        li.appendChild(subUl);
+
+                        // Isolated Toggle Caret Button (Collapse / Expand without scrolling)
+                        const toggleBtn = headingRow.querySelector('.toggle-caret');
+                        if (toggleBtn) {
+                            toggleBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                const isHidden = subUl.classList.toggle('hidden');
+                                const svg = toggleBtn.querySelector('svg');
+                                if (isHidden) {
+                                    svg.style.transform = 'rotate(-90deg)';
+                                } else {
+                                    svg.style.transform = 'rotate(0deg)';
+                                }
+                            });
+                        }
+                    }
+
+                    treeUl.appendChild(li);
+                });
+
+                indexTreeContainer.appendChild(treeUl);
+            }
+
+            function scrollToEditorNode(nodeId) {
+                const targetNode = document.getElementById(nodeId);
+                if (targetNode) {
+                    targetNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Trigger reflow to restart CSS keyframe pulse animation
+                    targetNode.classList.remove('highlight-jump');
+                    void targetNode.offsetWidth; 
+                    targetNode.classList.add('highlight-jump');
+
+                    // Remove highlight class after animation finishes
+                    setTimeout(() => {
+                        targetNode.classList.remove('highlight-jump');
+                    }, 2100);
+                } else {
+                    showMessage("Target section not found in document.", true);
+                }
+            }
+
+            // Real-time Editor Input Listener for Index Update
+            editor.addEventListener('input', () => {
+                clearTimeout(indexDebounceTimer);
+                indexDebounceTimer = setTimeout(() => {
+                    parseDynamicIndex();
+                }, 300);
+            });
+
+            // Initial parse on load
+            setTimeout(parseDynamicIndex, 200);
+
+            connectFolderBtn.addEventListener('click', async () => {
+                try {
+                    if (!window.showDirectoryPicker) {
+                        showMessage("Directory Picker API is not supported in this browser. Please use Chrome or Edge.", true);
+                        return;
+                    }
+                    workspaceHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                    currentFolderName.innerText = workspaceHandle.name;
+                    folderBanner.classList.remove('hidden');
+                    sidebarActions.classList.remove('opacity-50', 'pointer-events-none');
+                    
+                    await loadWorkspaceTree();
+                    switchTab('files');
+                    showMessage("Workspace folder connected!");
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        showMessage("Folder connect failed: " + err.message, true);
+                    }
+                }
+            });
+
+            async function loadWorkspaceTree() {
+                if (!workspaceHandle) return;
+                fileTreeContainer.innerHTML = '';
+                
+                try {
+                    const entries = [];
+                    for await (const entry of workspaceHandle.values()) {
+                        entries.push(entry);
+                    }
+                    
+                    entries.sort((a, b) => {
+                        if (a.kind === b.kind) return a.name.localeCompare(b.name);
+                        return a.kind === 'directory' ? -1 : 1;
+                    });
+
+                    if (entries.length === 0) {
+                        fileTreeContainer.innerHTML = `<div class="text-xs text-slate-500 italic py-4 text-center">Folder is empty</div>`;
+                        return;
+                    }
+
+                    for (const entry of entries) {
+                        const itemEl = createTreeItemElement(entry);
+                        fileTreeContainer.appendChild(itemEl);
+                    }
+                } catch (err) {
+                    showMessage("Error scanning directory: " + err.message, true);
+                }
+            }
+
+            function createTreeItemElement(entry) {
+                const div = document.createElement('div');
+                div.className = 'group flex items-center justify-between p-2 hover:bg-slate-800 rounded-lg text-xs cursor-pointer text-slate-300 transition-colors';
+                
+                const isDir = entry.kind === 'directory';
+                const icon = isDir ? '📁' : '📄';
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-2 truncate pr-2 flex-grow">
+                        <span>${icon}</span>
+                        <span class="truncate item-name font-medium">${entry.name}</span>
+                    </div>
+                    <div class="hidden group-hover:flex items-center gap-1 flex-shrink-0">
+                        <button title="Rename" class="rename-item p-1 hover:bg-slate-700 text-slate-300 rounded">✏️</button>
+                        <button title="Delete" class="delete-item p-1 hover:bg-red-900/50 text-red-400 rounded">🗑️</button>
+                    </div>
+                `;
+
+                div.querySelector('.item-name').parentElement.addEventListener('click', async () => {
+                    if (!isDir) {
+                        await openFile(entry);
+                    }
+                });
+
+                div.querySelector('.rename-item').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const newName = await promptUser("Rename Item", `Enter new name for "${entry.name}":`, entry.name);
+                    if (newName && newName !== entry.name) {
+                        await renameEntry(entry, newName);
+                    }
+                });
+
+                div.querySelector('.delete-item').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const confirmDel = await promptUser("Delete File", `Type "DELETE" to remove ${entry.name}:`, "");
+                    if (confirmDel === "DELETE") {
+                        try {
+                            await workspaceHandle.removeEntry(entry.name, { recursive: true });
+                            showMessage(`Deleted ${entry.name}`);
+                            if (currentFileHandle && currentFileHandle.name === entry.name) {
+                                currentFileHandle = null;
+                                activeDocTitle.innerText = "Untitled Notebook";
+                            }
+                            await loadWorkspaceTree();
+                        } catch (err) {
+                            showMessage("Could not delete item: " + err.message, true);
+                        }
+                    }
+                });
+
+                return div;
+            }
+
+            async function openFile(fileHandle) {
+                try {
+                    const file = await fileHandle.getFile();
+                    const contents = await file.text();
+                    
+                    currentFileHandle = fileHandle;
+                    activeDocTitle.innerText = fileHandle.name;
+                    editor.innerHTML = contents;
+
+                    // Re-observe diagram elements in the loaded content
+                    document.querySelectorAll('.diagram-board, .diag-shape').forEach(el => {
+                        shapeResizeObserver.observe(el);
+                    });
+
+                    document.querySelectorAll('.diagram-board').forEach(board => {
+                        updateConnections(board.id);
+                    });
+
+                    parseDynamicIndex();
+                    showMessage(`Opened "${fileHandle.name}"`);
+                } catch (err) {
+                    showMessage("Error reading file: " + err.message, true);
+                }
+            }
+
+            async function renameEntry(oldEntry, newName) {
+                try {
+                    if (oldEntry.kind === 'file') {
+                        const oldFile = await oldEntry.getFile();
+                        const content = await oldFile.text();
+                        
+                        const newFileHandle = await workspaceHandle.getFileHandle(newName, { create: true });
+                        const writable = await newFileHandle.createWritable();
+                        await writable.write(content);
+                        await writable.close();
+
+                        await workspaceHandle.removeEntry(oldEntry.name);
+
+                        if (currentFileHandle && currentFileHandle.name === oldEntry.name) {
+                            currentFileHandle = newFileHandle;
+                            activeDocTitle.innerText = newName;
+                        }
+
+                        showMessage(`Renamed to "${newName}"`);
+                        await loadWorkspaceTree();
+                    }
+                } catch (err) {
+                    showMessage("Rename failed: " + err.message, true);
+                }
+            }
+
+            newFileBtn.addEventListener('click', async () => {
+                if (!workspaceHandle) return;
+                const fileName = await promptUser("New Note File", "Enter file name (e.g., Note.html):", "Note.html");
+                if (fileName) {
+                    try {
+                        const newHandle = await workspaceHandle.getFileHandle(fileName, { create: true });
+                        currentFileHandle = newHandle;
+                        activeDocTitle.innerText = fileName;
+                        editor.innerHTML = '<div>>> New Note Section</div><div>* First point</div>';
+                        
+                        const writable = await newHandle.createWritable();
+                        await writable.write(editor.innerHTML);
+                        await writable.close();
+
+                        showMessage(`Created "${fileName}"`);
+                        await loadWorkspaceTree();
+                        parseDynamicIndex();
+                    } catch (err) {
+                        showMessage("Failed to create file: " + err.message, true);
+                    }
+                }
+            });
+
+            refreshTreeBtn.addEventListener('click', loadWorkspaceTree);
+
+            colorBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const color = e.target.getAttribute('data-color');
+                    editor.focus();
+                    document.execCommand('styleWithCSS', false, true);
+                    document.execCommand('foreColor', false, color);
+                });
+            });
+
+            alignBtns.forEach(btn => {
+                btn.addEventListener('mousedown', (e) => e.preventDefault());
+                btn.addEventListener('click', () => {
+                    const alignCommand = btn.closest('.align-btn').getAttribute('data-align');
+                    document.execCommand(alignCommand, false, null);
+                });
+            });
+
+            saveHtmlBtn.addEventListener('click', async () => {
+                if (!workspaceHandle) {
+                    showMessage("Click 'Connect' in the sidebar to link a workspace folder first.", true);
+                    return;
+                }
+
+                try {
+                    let targetHandle = currentFileHandle;
+                    if (!targetHandle) {
+                        const filename = activeDocTitle.innerText.includes('.html') ? activeDocTitle.innerText : `Notebook_${Date.now()}.html`;
+                        targetHandle = await workspaceHandle.getFileHandle(filename, { create: true });
+                        currentFileHandle = targetHandle;
+                        activeDocTitle.innerText = filename;
+                    }
+
+                    const writable = await targetHandle.createWritable();
+                    await writable.write(editor.innerHTML);
+                    await writable.close();
+                    
+                    showMessage(`Saved as "${targetHandle.name}"`);
+                    await loadWorkspaceTree();
+                } catch (err) {
+                    showMessage("Save failed: " + err.message, true);
+                }
+            });
+
+            editor.addEventListener('paste', function(e) {
+                const clipboardData = e.clipboardData || window.clipboardData;
+                if (!clipboardData) return;
+
+                const items = clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    if (item.type.indexOf('image') === 0) {
+                        e.preventDefault(); 
+                        const file = item.getAsFile();
+                        if (!file) continue;
+
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            editor.focus();
+                            document.execCommand('insertImage', false, event.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                        return; 
+                    }
+                }
+            });
+
+            let draggedShape = null;
+            let dragOffsetX = 0;
+            let dragOffsetY = 0;
+            let connectingBoardId = null;
+            let connectStartShape = null;
+
+            const shapeResizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const el = entry.target;
+                    const board = el.closest('.diagram-board');
+                    if (board) {
+                        updateConnections(board.id);
+                    }
+                }
+            });
+
+            function createShapeHTML(type, id) {
+                const className = type === 'box' ? 'shape-box' : 'shape-circle';
+                return `<div class="diag-shape ${className}" id="${id}" style="left: 40px; top: 40px;">
+                            <span contenteditable="true">Text</span>
+                        </div>`;
+            }
+
+            addDiagramBtn.addEventListener('click', () => {
+                editor.focus();
+                const boardId = 'board-' + Date.now();
+                const diagramHtml = `
+                <div class="diagram-board" contenteditable="false" id="${boardId}">
+                    <div class="diag-toolbar">
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="add-box" data-board="${boardId}">+ Box</button>
+                            <button type="button" class="add-circle" data-board="${boardId}">+ Circle</button>
+                            <button type="button" class="connect-mode" data-board="${boardId}">🔗 Connect</button>
+                        </div>
+                        <button type="button" class="del-board" title="Delete Diagram">🗑️ Delete</button>
+                    </div>
+                    <div class="diag-canvas" id="canvas-${boardId}">
+                        <svg class="diag-svg-layer" id="svg-${boardId}">
+                            <defs>
+                                <marker id="arrow-${boardId}" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+                                </marker>
+                            </defs>
+                        </svg>
+                        <div class="diag-label-layer" id="labels-${boardId}" style="position:absolute; inset:0; pointer-events:none; z-index:6;"></div>
+                    </div>
+                </div><p><br></p>`;
+                document.execCommand('insertHTML', false, diagramHtml);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target.matches('.add-box') || e.target.matches('.add-circle')) {
+                    const boardId = e.target.getAttribute('data-board');
+                    const canvas = document.getElementById('canvas-' + boardId);
+                    const shapeId = 'shape-' + Date.now() + Math.floor(Math.random()*1000);
+                    const shapeHtml = createShapeHTML(e.target.matches('.add-box') ? 'box' : 'circle', shapeId);
+                    canvas.insertAdjacentHTML('beforeend', shapeHtml);
+                    
+                    const newShape = document.getElementById(shapeId);
+                    if (newShape) shapeResizeObserver.observe(newShape);
+                    const board = document.getElementById(boardId);
+                    if (board) shapeResizeObserver.observe(board);
+                }
+
+                if (e.target.matches('.del-board')) {
+                    const board = e.target.closest('.diagram-board');
+                    if (board) board.remove();
+                }
+
+                if (e.target.matches('.connect-mode')) {
+                    const btn = e.target;
+                    const boardId = btn.getAttribute('data-board');
+                    
+                    if (connectingBoardId === boardId) {
+                        connectingBoardId = null;
+                        connectStartShape = null;
+                        btn.classList.remove('active-connect');
+                        document.querySelectorAll('.connect-target-glow').forEach(el => el.classList.remove('connect-target-glow'));
+                    } else {
+                        document.querySelectorAll('.connect-mode.active-connect').forEach(el => el.classList.remove('active-connect'));
+                        connectingBoardId = boardId;
+                        connectStartShape = null;
+                        btn.classList.add('active-connect');
+                    }
+                }
+            });
+
+            document.addEventListener('mousedown', (e) => {
+                const shape = e.target.closest('.diag-shape');
+                if (!shape) return;
+
+                const board = shape.closest('.diagram-board');
+                if (!board) return;
+
+                if (connectingBoardId === board.id) {
+                    if (!connectStartShape) {
+                        connectStartShape = shape;
+                        shape.classList.add('connect-target-glow');
+                    } else {
+                        if (connectStartShape.id !== shape.id) {
+                            createConnection(board.id, connectStartShape.id, shape.id);
+                        }
+                        connectStartShape.classList.remove('connect-target-glow');
+                        connectStartShape = null;
+                    }
+                    return; 
+                }
+
+                const rect = shape.getBoundingClientRect();
+                const isResizeClick = (e.clientX - rect.left) > (rect.width - 15) && (e.clientY - rect.top) > (rect.height - 15);
+
+                if (e.target.tagName.toLowerCase() !== 'span' && !isResizeClick) {
+                    draggedShape = shape;
+                    dragOffsetX = e.clientX - rect.left;
+                    dragOffsetY = e.clientY - rect.top;
+                    e.preventDefault(); 
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!draggedShape) return;
+                
+                const canvas = draggedShape.parentElement;
+                const canvasRect = canvas.getBoundingClientRect();
+                
+                let newLeft = e.clientX - canvasRect.left - dragOffsetX;
+                let newTop = e.clientY - canvasRect.top - dragOffsetY;
+
+                newLeft = Math.max(0, Math.min(newLeft, canvasRect.width - draggedShape.offsetWidth));
+                newTop = Math.max(0, Math.min(newTop, canvasRect.height - draggedShape.offsetHeight));
+
+                draggedShape.style.left = newLeft + 'px';
+                draggedShape.style.top = newTop + 'px';
+
+                updateConnections(canvas.closest('.diagram-board').id);
+            });
+
+            document.addEventListener('mouseup', () => {
+                draggedShape = null;
+            });
+
+            function createConnection(boardId, startId, endId) {
+                const svg = document.getElementById('svg-' + boardId);
+                const labelsLayer = document.getElementById('labels-' + boardId);
+                const lineId = 'line-' + startId + '-' + endId + '-' + Date.now();
+                
+                const lineHTML = `<line id="${lineId}" data-start="${startId}" data-end="${endId}" stroke="#475569" stroke-width="2" marker-end="url(#arrow-${boardId})"></line>`;
+                svg.innerHTML += lineHTML;
+
+                const labelHTML = `<div class="diag-label" id="label-${lineId}" contenteditable="true">Link</div>`;
+                labelsLayer.insertAdjacentHTML('beforeend', labelHTML);
+
+                updateConnections(boardId);
+            }
+
+            function updateConnections(boardId) {
+                const svg = document.getElementById('svg-' + boardId);
+                if (!svg) return;
+                
+                const lines = svg.querySelectorAll('line');
+                lines.forEach(line => {
+                    const startShape = document.getElementById(line.getAttribute('data-start'));
+                    const endShape = document.getElementById(line.getAttribute('data-end'));
+                    const label = document.getElementById('label-' + line.id);
+                    
+                    if (startShape && endShape) {
+                        const startX = startShape.offsetLeft + (startShape.offsetWidth / 2);
+                        const startY = startShape.offsetTop + (startShape.offsetHeight / 2);
+                        const endX = endShape.offsetLeft + (endShape.offsetWidth / 2);
+                        const endY = endShape.offsetTop + (endShape.offsetHeight / 2);
+
+                        line.setAttribute('x1', startX);
+                        line.setAttribute('y1', startY);
+                        line.setAttribute('x2', endX);
+                        line.setAttribute('y2', endY);
+
+                        if (label) {
+                            label.style.left = ((startX + endX) / 2) + 'px';
+                            label.style.top = ((startY + endY) / 2) + 'px';
+                        }
+                    }
+                });
+            }
+
+            downloadBtn.addEventListener('click', async () => {
+                const originalText = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = 'Exporting...';
+                downloadBtn.disabled = true;
+                
+                document.body.classList.add('pdf-exporting');
+
+                const opt = {
+                    margin: [10, 0, 10, 0], 
+                    filename: `${activeDocTitle.innerText.replace('.html', '')}_Export.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        scrollY: 0, 
+                        scrollX: 0, 
+                        useCORS: true,
+                        logging: false
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                editor.blur(); 
+                
+                try {
+                    await html2pdf().set(opt).from(pdfTarget).save();
+                    showMessage("Exported PDF successfully!");
+                } catch (err) {
+                    showMessage("Failed to export PDF: " + err.message, true);
+                } finally {
+                    document.body.classList.remove('pdf-exporting');
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
