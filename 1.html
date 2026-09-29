@@ -442,6 +442,11 @@
                 <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
                     <span id="activeDocTitle"
                         class="text-sm font-bold text-slate-800 tracking-tight">collection.html</span>
+                    
+                    <!-- Unsaved Indicator -->
+                    <span id="unsavedIndicator" class="hidden text-[10px] uppercase tracking-wider font-bold text-amber-700 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded shadow-sm">
+                        Unsaved
+                    </span>
                 </div>
 
                 <!-- Color Palette Swatches -->
@@ -597,6 +602,7 @@
             const saveHtmlBtn = document.getElementById('saveHtmlBtn');
             const connectFolderBtn = document.getElementById('connectFolderBtn');
             const importClipsBtn = document.getElementById('importClipsBtn');
+            const unsavedIndicator = document.getElementById('unsavedIndicator');
 
             // Sidebar Tabs Elements
             const tabFilesBtn = document.getElementById('tabFilesBtn');
@@ -629,12 +635,31 @@
             let currentFileHandle = null;
             let modalResolver = null;
             let indexDebounceTimer = null;
+            let hasUnsavedChanges = false;
+
+            // Helper function to toggle the unsaved UI
+            function setUnsavedState(isUnsaved) {
+                hasUnsavedChanges = isUnsaved;
+                if (isUnsaved) {
+                    unsavedIndicator.classList.remove('hidden');
+                } else {
+                    unsavedIndicator.classList.add('hidden');
+                }
+            }
 
             // Enable Tab key support (inserts 4 spaces without losing focus)
             editor.addEventListener('keydown', (e) => {
                 if (e.key === 'Tab') {
                     e.preventDefault();
                     document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                }
+            });
+
+            // Add Ctrl + S / Cmd + S Save Shortcut
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                    e.preventDefault(); // Prevent the default browser save dialog
+                    saveHtmlBtn.click(); // Trigger your existing save function
                 }
             });
 
@@ -680,31 +705,6 @@
                 if (e.key === 'Escape') modalCancelBtn.click();
             });
 
-            // // Web Clipper Storage Import Receiver
-            // if (importClipsBtn) {
-            //     importClipsBtn.addEventListener('click', () => {
-            //         if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-            //             chrome.storage.local.get({ notebookClips: [] }, (result) => {
-            //                 const clips = result.notebookClips;
-            //                 if (!clips || clips.length === 0) {
-            //                     showMessage("No web clips found in buffer.", true);
-            //                     return;
-            //                 }
-
-            //                 clips.forEach(clip => {
-            //                     editor.insertAdjacentHTML('beforeend', clip.html);
-            //                 });
-
-            //                 chrome.storage.local.set({ notebookClips: [] });
-            //                 parseDynamicIndex();
-            //                 showMessage(`Imported ${clips.length} web clip(s)!`);
-            //             });
-            //         } else {
-            //             showMessage("Web Clipper extension active. Highlight & right-click web pages to clip!", false);
-            //         }
-            //     });
-            // }
-
             // 1. Receive incoming clip payload from content script bridge
             window.addEventListener('message', (event) => {
                 if (event.data && event.data.type === 'RECEIVE_NOTEBOOK_CLIPS') {
@@ -718,6 +718,7 @@
                         editor.insertAdjacentHTML('beforeend', clip.html);
                     });
 
+                    setUnsavedState(true);
                     parseDynamicIndex();
                     showMessage(`Imported ${clips.length} web clip(s)!`);
                 }
@@ -919,6 +920,7 @@
             }
 
             editor.addEventListener('input', () => {
+                setUnsavedState(true);
                 clearTimeout(indexDebounceTimer);
                 indexDebounceTimer = setTimeout(() => {
                     parseDynamicIndex();
@@ -1049,6 +1051,7 @@
 
                     parseDynamicIndex();
                     showMessage(`Opened "${fileHandle.name}"`);
+                    setUnsavedState(false);
                 } catch (err) {
                     showMessage("Error reading file: " + err.message, true);
                 }
@@ -1097,6 +1100,7 @@
                         showMessage(`Created "${fileName}"`);
                         await loadWorkspaceTree();
                         parseDynamicIndex();
+                        setUnsavedState(false);
                     } catch (err) {
                         showMessage("Failed to create file: " + err.message, true);
                     }
@@ -1111,6 +1115,7 @@
                     editor.focus();
                     document.execCommand('styleWithCSS', false, true);
                     document.execCommand('foreColor', false, color);
+                    setUnsavedState(true);
                 });
             });
 
@@ -1119,6 +1124,7 @@
                 btn.addEventListener('click', () => {
                     const alignCommand = btn.closest('.align-btn').getAttribute('data-align');
                     document.execCommand(alignCommand, false, null);
+                    setUnsavedState(true);
                 });
             });
 
@@ -1143,6 +1149,7 @@
 
                     showMessage(`Saved as "${targetHandle.name}"`);
                     await loadWorkspaceTree();
+                    setUnsavedState(false);
                 } catch (err) {
                     showMessage("Save failed: " + err.message, true);
                 }
@@ -1164,11 +1171,13 @@
                         reader.onload = function (event) {
                             editor.focus();
                             document.execCommand('insertImage', false, event.target.result);
+                            setUnsavedState(true);
                         };
                         reader.readAsDataURL(file);
                         return;
                     }
                 }
+                setUnsavedState(true);
             });
 
             let draggedShape = null;
@@ -1219,6 +1228,7 @@
                     </div>
                 </div><p><br></p>`;
                 document.execCommand('insertHTML', false, diagramHtml);
+                setUnsavedState(true);
             });
 
             document.addEventListener('click', (e) => {
@@ -1233,11 +1243,15 @@
                     if (newShape) shapeResizeObserver.observe(newShape);
                     const board = document.getElementById(boardId);
                     if (board) shapeResizeObserver.observe(board);
+                    setUnsavedState(true);
                 }
 
                 if (e.target.matches('.del-board')) {
                     const board = e.target.closest('.diagram-board');
-                    if (board) board.remove();
+                    if (board) {
+                        board.remove();
+                        setUnsavedState(true);
+                    }
                 }
 
                 if (e.target.matches('.connect-mode')) {
@@ -1306,6 +1320,7 @@
                 draggedShape.style.top = newTop + 'px';
 
                 updateConnections(canvas.closest('.diagram-board').id);
+                setUnsavedState(true);
             });
 
             document.addEventListener('mouseup', () => {
@@ -1324,6 +1339,7 @@
                 labelsLayer.insertAdjacentHTML('beforeend', labelHTML);
 
                 updateConnections(boardId);
+                setUnsavedState(true);
             }
 
             function updateConnections(boardId) {
