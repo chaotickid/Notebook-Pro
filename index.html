@@ -199,7 +199,7 @@
             box-shadow: 1px 1px 0px #1e293b;
         }
 
-        /* Outlined Pill Box (e.g. Stateless, Common Codes:, 200) */
+        /* Outlined Pill Box */
         .note-pill-box {
             display: inline-block;
             border: 1.8px solid #334155;
@@ -234,7 +234,7 @@
             color: #1e293b;
         }
 
-        /* Pink Sticky Note Wrapper & Card (Stays at exact line where inserted) */
+        /* Pink Sticky Note Wrapper & Card */
         .note-sticky-row {
             display: flex;
             justify-content: flex-end;
@@ -466,7 +466,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                Connect
+                <span id="connectBtnText">Connect</span>
             </button>
         </div>
 
@@ -505,10 +505,54 @@
                 </button>
             </div>
 
-            <!-- Active Folder Banner -->
+            <!-- Showcase Connected Path Details Card -->
             <div id="folderBanner"
-                class="px-4 py-2 text-xs font-medium text-slate-400 bg-slate-950/60 border-b border-slate-800/60 truncate hidden">
-                Folder: <span id="currentFolderName" class="text-blue-400 font-semibold">None</span>
+                class="px-3.5 py-2.5 text-xs bg-slate-950/90 border-b border-slate-800 hidden">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-emerald-400 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Connected Workspace
+                    </span>
+                    <button id="disconnectFolderBtn" title="Disconnect & Clear Saved Path"
+                        class="text-[10px] text-slate-400 hover:text-red-400 font-semibold transition-colors">
+                        Disconnect
+                    </button>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 rounded-md p-2 font-mono text-[11px] text-slate-300 space-y-1">
+                    <div class="truncate" title="Connected Root Folder">
+                        <span class="text-slate-500">Root:</span>
+                        <span id="currentFolderName" class="text-blue-400 font-semibold">None</span>
+                    </div>
+                    <div class="truncate" title="Active File Relative Path">
+                        <span class="text-slate-500">Path:</span>
+                        <span id="currentFullPathDisplay" class="text-amber-300">/</span >
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800/80 font-sans">
+                        <span id="workspaceStatsText">0 files</span>
+                        <span id="workspaceSavedBadge" class="text-emerald-400/90">✓ Saved in LocalStorage</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Workspace Reconnect Prompt Banner (Shown when browser requires 1-click permission on reload) -->
+            <div id="reconnectBanner" class="p-3 bg-blue-950/60 border-b border-blue-800/60 hidden">
+                <div class="text-xs font-bold text-blue-200 mb-1 flex items-center gap-1.5">
+                    <span>📂</span>
+                    <span>Saved Workspace Found</span>
+                </div>
+                <p class="text-[11px] text-blue-300/80 mb-2 leading-relaxed">
+                    Path: <code id="savedPathPreview" class="bg-blue-900/70 text-white px-1.5 py-0.5 rounded font-mono"></code>
+                </p>
+                <div class="flex items-center gap-2">
+                    <button id="resumeWorkspaceBtn"
+                        class="flex-1 py-1.5 px-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md text-xs font-semibold transition-colors shadow-sm">
+                        Resume Workspace
+                    </button>
+                    <button id="forgetWorkspaceBtn"
+                        class="py-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-[11px] font-medium transition-colors">
+                        Reset
+                    </button>
+                </div>
             </div>
 
             <!-- File Tree View Container -->
@@ -557,13 +601,22 @@
         <header id="main-toolbar"
             class="editor-toolbar flex-shrink-0 px-5 py-2.5 flex flex-col gap-2">
 
-            <!-- Top Row: File Title, Pen Colors, Marker Highlights, Alignment & Actions -->
+            <!-- Top Row: File Title, Connected Path Pill, Pen Colors, Marker Highlights, Alignment & Actions -->
             <div class="flex flex-wrap justify-between items-center gap-3">
                 <div class="flex items-center gap-3 flex-wrap">
-                    <!-- Active File Title Display & Dynamic Animated Save Status Badge -->
+                    <!-- Active File Title Display, Path Breadcrumb & Dynamic Animated Save Status Badge -->
                     <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
-                        <span id="activeDocTitle"
-                            class="text-sm font-bold text-slate-800 tracking-tight">SpringBoot_Notes.html</span>
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-1.5">
+                                <span id="headerPathBadge"
+                                    class="hidden text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded font-semibold"
+                                    title="Connected Workspace Path">
+                                    📁 Local
+                                </span>
+                                <span id="activeDocTitle"
+                                    class="text-sm font-bold text-slate-800 tracking-tight">SpringBoot_Notes.html</span>
+                            </div>
+                        </div>
                         <div id="saveStatusIndicator" class="flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full transition-all duration-300"></div>
                     </div>
 
@@ -628,7 +681,7 @@
                 </div>
             </div>
 
-            <!-- Second Row: Study Note Aesthetic Widgets (From Reference Photos) -->
+            <!-- Second Row: Study Note Aesthetic Widgets -->
             <div class="flex items-center gap-2 pt-1.5 border-t border-slate-200/80 text-xs flex-wrap">
                 <span class="text-[10px] font-bold uppercase text-slate-400">Insert at Cursor:</span>
 
@@ -717,6 +770,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Core UI Elements
             const editor = document.getElementById('editor');
+            const DEFAULT_EDITOR_HTML = editor.innerHTML;
+            const DEFAULT_DOC_TITLE = 'SpringBoot_Notes.html';
+
             const colorBtns = document.querySelectorAll('.color-btn');
             const markerBtns = document.querySelectorAll('.marker-btn');
             const clearHighlightBtn = document.getElementById('clearHighlightBtn');
@@ -725,6 +781,8 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const saveHtmlBtn = document.getElementById('saveHtmlBtn');
             const connectFolderBtn = document.getElementById('connectFolderBtn');
+            const connectBtnText = document.getElementById('connectBtnText');
+            const disconnectFolderBtn = document.getElementById('disconnectFolderBtn');
             const importClipsBtn = document.getElementById('importClipsBtn');
             const saveStatusIndicator = document.getElementById('saveStatusIndicator');
 
@@ -743,13 +801,20 @@
             const indexCountBadge = document.getElementById('indexCountBadge');
             const indexTreeContainer = document.getElementById('indexTreeContainer');
 
-            // Workspace Explorer Elements
+            // Workspace Explorer & Connected Path Elements
             const fileTreeContainer = document.getElementById('fileTreeContainer');
             const sidebarActions = document.getElementById('sidebarActions');
             const newFileBtn = document.getElementById('newFileBtn');
             const refreshTreeBtn = document.getElementById('refreshTreeBtn');
             const folderBanner = document.getElementById('folderBanner');
             const currentFolderName = document.getElementById('currentFolderName');
+            const currentFullPathDisplay = document.getElementById('currentFullPathDisplay');
+            const workspaceStatsText = document.getElementById('workspaceStatsText');
+            const headerPathBadge = document.getElementById('headerPathBadge');
+            const reconnectBanner = document.getElementById('reconnectBanner');
+            const savedPathPreview = document.getElementById('savedPathPreview');
+            const resumeWorkspaceBtn = document.getElementById('resumeWorkspaceBtn');
+            const forgetWorkspaceBtn = document.getElementById('forgetWorkspaceBtn');
             const activeDocTitle = document.getElementById('activeDocTitle');
             const pdfTarget = document.getElementById('pdf-target');
 
@@ -760,6 +825,14 @@
             const modalInput = document.getElementById('modalInput');
             const modalCancelBtn = document.getElementById('modalCancelBtn');
             const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+            // LocalStorage Keys & IndexedDB Constants
+            const LS_WORKSPACE_PATH_KEY = 'notebook_pro_workspace_path';
+            const LS_LAST_OPENED_FILE_KEY = 'notebook_pro_last_file';
+            const LS_CONNECTED_AT_KEY = 'notebook_pro_connected_at';
+            const IDB_NAME = 'NotebookProWorkspaceDB';
+            const IDB_STORE = 'handles';
+            const IDB_HANDLE_KEY = 'workspaceDirectoryHandle';
 
             // Workspace & Auto-Save State
             let workspaceHandle = null;
@@ -773,13 +846,234 @@
             const AUTO_SAVE_DELAY = 1000;
 
             // =========================================================================
+            // PERSISTENT STORAGE ENGINE (localStorage + IndexedDB for DirectoryHandle)
+            // =========================================================================
+
+            function openWorkspaceDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(IDB_NAME, 1);
+                    request.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(IDB_STORE)) {
+                            db.createObjectStore(IDB_STORE);
+                        }
+                    };
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async function saveWorkspaceSessionToStorage(dirHandle, activeFileName = null) {
+                // 1. Save path metadata in browser localStorage
+                const folderPathName = `/${dirHandle.name}`;
+                localStorage.setItem(LS_WORKSPACE_PATH_KEY, folderPathName);
+                localStorage.setItem(LS_CONNECTED_AT_KEY, new Date().toISOString());
+                if (activeFileName) {
+                    localStorage.setItem(LS_LAST_OPENED_FILE_KEY, activeFileName);
+                }
+
+                // 2. Save directory handle in IndexedDB so it can be reloaded on next app launch
+                try {
+                    const db = await openWorkspaceDB();
+                    await new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE, 'readwrite');
+                        tx.objectStore(IDB_STORE).put(dirHandle, IDB_HANDLE_KEY);
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = () => reject(tx.error);
+                    });
+                } catch (err) {
+                    console.warn("Could not store directory handle in IndexedDB:", err);
+                }
+            }
+
+            async function getSavedDirectoryHandleFromStorage() {
+                try {
+                    const db = await openWorkspaceDB();
+                    return await new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE, 'readonly');
+                        const req = tx.objectStore(IDB_STORE).get(IDB_HANDLE_KEY);
+                        req.onsuccess = () => resolve(req.result || null);
+                        req.onerror = () => reject(req.error);
+                    });
+                } catch (err) {
+                    return null;
+                }
+            }
+
+            async function clearWorkspaceSessionFromStorage() {
+                localStorage.removeItem(LS_WORKSPACE_PATH_KEY);
+                localStorage.removeItem(LS_LAST_OPENED_FILE_KEY);
+                localStorage.removeItem(LS_CONNECTED_AT_KEY);
+                try {
+                    const db = await openWorkspaceDB();
+                    await new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE, 'readwrite');
+                        tx.objectStore(IDB_STORE).delete(IDB_HANDLE_KEY);
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = () => reject(tx.error);
+                    });
+                } catch (err) {
+                    console.warn("Error clearing IndexedDB handle:", err);
+                }
+            }
+
+            // Update Connected Path UI Details in Sidebar and Top Header
+            function updateConnectedPathUI(fileCount = 0, dirCount = 0) {
+                const savedPath = localStorage.getItem(LS_WORKSPACE_PATH_KEY);
+                const lastFile = currentFileHandle ? currentFileHandle.name : '';
+
+                if (workspaceHandle && savedPath) {
+                    const fullRelativePath = lastFile
+                        ? `${savedPath}/${lastFile}`
+                        : `${savedPath}/`;
+
+                    currentFolderName.innerText = workspaceHandle.name;
+                    currentFullPathDisplay.innerText = fullRelativePath;
+                    currentFullPathDisplay.title = `Connected Path: ${fullRelativePath}`;
+                    workspaceStatsText.innerText = `${fileCount} file(s), ${dirCount} folder(s)`;
+
+                    folderBanner.classList.remove('hidden');
+                    reconnectBanner.classList.add('hidden');
+                    sidebarActions.classList.remove('opacity-50', 'pointer-events-none');
+                    connectBtnText.innerText = 'Change';
+
+                    headerPathBadge.innerText = `📁 ${fullRelativePath}`;
+                    headerPathBadge.classList.remove('hidden');
+                } else {
+                    folderBanner.classList.add('hidden');
+                    headerPathBadge.classList.add('hidden');
+                    sidebarActions.classList.add('opacity-50', 'pointer-events-none');
+                    connectBtnText.innerText = 'Connect';
+                }
+            }
+
+            // Show Default Note when no workspace is connected
+            function showDefaultNote() {
+                workspaceHandle = null;
+                currentFileHandle = null;
+                activeDocTitle.innerText = DEFAULT_DOC_TITLE;
+                editor.innerHTML = DEFAULT_EDITOR_HTML;
+                savedRange = null;
+                hasUnsavedChanges = false;
+                updateConnectedPathUI();
+                parseDynamicIndex();
+                setSaveState('unsaved');
+            }
+
+            // Activate a connected workspace handle and load all files
+            async function activateWorkspaceHandle(dirHandle, autoOpenFile = true) {
+                workspaceHandle = dirHandle;
+                await saveWorkspaceSessionToStorage(dirHandle);
+                const entries = await loadWorkspaceTree();
+
+                if (autoOpenFile && entries && entries.length > 0) {
+                    const lastOpenedFileName = localStorage.getItem(LS_LAST_OPENED_FILE_KEY);
+                    const fileEntries = entries.filter(e => e.kind === 'file');
+
+                    let targetFile = null;
+                    if (lastOpenedFileName) {
+                        targetFile = fileEntries.find(f => f.name === lastOpenedFileName);
+                    }
+                    if (!targetFile && fileEntries.length > 0) {
+                        targetFile = fileEntries[0];
+                    }
+
+                    if (targetFile) {
+                        await openFile(targetFile);
+                    }
+                }
+
+                updateConnectedPathUI(
+                    entries ? entries.filter(e => e.kind === 'file').length : 0,
+                    entries ? entries.filter(e => e.kind === 'directory').length : 0
+                );
+                switchTab('files');
+                setSaveState(hasUnsavedChanges ? 'unsaved' : 'saved');
+            }
+
+            // Check localStorage & IndexedDB on Startup
+            async function checkSavedWorkspaceOnStartup() {
+                const savedPath = localStorage.getItem(LS_WORKSPACE_PATH_KEY);
+                if (!savedPath) {
+                    // No saved path in localStorage -> show default note
+                    showDefaultNote();
+                    return;
+                }
+
+                const savedHandle = await getSavedDirectoryHandleFromStorage();
+                if (!savedHandle) {
+                    showDefaultNote();
+                    return;
+                }
+
+                try {
+                    const permStatus = await savedHandle.queryPermission({ mode: 'readwrite' });
+                    if (permStatus === 'granted') {
+                        await activateWorkspaceHandle(savedHandle, true);
+                        showMessage(`Restored workspace "${savedPath}"`);
+                    } else {
+                        // Browser requires a user click to grant permission to the saved handle
+                        savedPathPreview.innerText = savedPath;
+                        reconnectBanner.classList.remove('hidden');
+                        showDefaultNote();
+                    }
+                } catch (err) {
+                    console.warn("Could not restore saved workspace:", err);
+                    showDefaultNote();
+                }
+            }
+
+            // Resume button when browser asks to re-verify saved folder permission
+            resumeWorkspaceBtn.addEventListener('click', async () => {
+                const savedHandle = await getSavedDirectoryHandleFromStorage();
+                if (!savedHandle) {
+                    await clearWorkspaceSessionFromStorage();
+                    reconnectBanner.classList.add('hidden');
+                    showDefaultNote();
+                    return;
+                }
+
+                try {
+                    const perm = await savedHandle.requestPermission({ mode: 'readwrite' });
+                    if (perm === 'granted') {
+                        reconnectBanner.classList.add('hidden');
+                        await activateWorkspaceHandle(savedHandle, true);
+                        showMessage(`Connected to "${savedHandle.name}"`);
+                    } else {
+                        showMessage("Permission denied for saved workspace. Showing default note.", true);
+                    }
+                } catch (err) {
+                    showMessage("Could not reconnect workspace: " + err.message, true);
+                }
+            });
+
+            // Forget / Disconnect Workspace
+            async function disconnectWorkspace() {
+                await clearWorkspaceSessionFromStorage();
+                reconnectBanner.classList.add('hidden');
+                fileTreeContainer.innerHTML = `
+                    <div class="text-center py-12 px-4 text-slate-500 text-xs leading-relaxed">
+                        <svg class="w-10 h-10 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Click <strong class="text-slate-400">"Connect"</strong> above to link your local workspace folder.
+                    </div>`;
+                showDefaultNote();
+                showMessage("Workspace disconnected. Showing default note.");
+            }
+
+            disconnectFolderBtn.addEventListener('click', disconnectWorkspace);
+            forgetWorkspaceBtn.addEventListener('click', disconnectWorkspace);
+
+            // =========================================================================
             // ROCK-SOLID CURSOR BOOKMARK & LINE-AWARE INSERTION ENGINE
-            // Never resets to the top of #editor even after modal popups
             // =========================================================================
             let savedRange = null;
 
             function captureCurrentSelection() {
-                // Do not overwrite savedRange while modal is open
                 if (!customModal.classList.contains('hidden')) return;
 
                 const sel = window.getSelection();
@@ -800,7 +1094,6 @@
                 }
             });
 
-            // Drops a physical invisible DOM marker `<span id="cursor-bookmark-marker">` at the exact cursor
             function dropPhysicalCursorBookmark() {
                 removePhysicalCursorBookmark();
                 const range = getActiveOrSavedRange();
@@ -819,7 +1112,6 @@
                 if (existing) existing.remove();
             }
 
-            // Returns a guaranteed Range inside #editor without calling editor.focus() first
             function getActiveOrSavedRange() {
                 const bookmark = document.getElementById('cursor-bookmark-marker');
                 if (bookmark && editor.contains(bookmark)) {
@@ -841,7 +1133,6 @@
                     return savedRange.cloneRange();
                 }
 
-                // Fallback: end of editor (never top of editor!)
                 const endRange = document.createRange();
                 endRange.selectNodeContents(editor);
                 endRange.collapse(false);
@@ -866,7 +1157,6 @@
                 savedRange = newRange.cloneRange();
             }
 
-            // Find the top-level line block (direct child of #editor) where a node lives
             function getTopLevelLineBlock(node) {
                 let curr = node;
                 while (curr && curr.parentNode !== editor && curr !== editor) {
@@ -875,7 +1165,6 @@
                 return (curr && curr.parentNode === editor) ? curr : null;
             }
 
-            // 1. Insert INLINE HTML (e.g., Outlined Pill, Tab spaces) right inside the active text line
             function insertInlineAtCursor(htmlString) {
                 const range = getActiveOrSavedRange();
                 removePhysicalCursorBookmark();
@@ -902,8 +1191,6 @@
                 parseDynamicIndex();
             }
 
-            // 2. Insert BLOCK HTML (e.g., Highlighted Topic, Framed Box, Tip Banner, Sticky, Diagram)
-            // Inserts cleanly at or right after the exact line block where the cursor is pointing
             function insertBlockAtCursor(htmlString) {
                 const range = getActiveOrSavedRange();
                 const anchorNode = range.startContainer;
@@ -926,12 +1213,10 @@
                         lastInserted = block;
                     });
 
-                    // If the line the cursor was on was completely blank, remove the blank line so it replaces it cleanly
                     if (isCurrentLineEmpty) {
                         currentLineBlock.remove();
                     }
                 } else {
-                    // Append at the end if cursor wasn't inside a specific line block
                     newBlocks.forEach(block => {
                         editor.appendChild(block);
                         lastInserted = block;
@@ -946,7 +1231,6 @@
                 parseDynamicIndex();
             }
 
-            // Prevent all toolbar buttons from stealing focus from #editor on mousedown
             document.querySelectorAll('.widget-btn, #addDiagramBtn, .color-btn, .marker-btn, #clearHighlightBtn, .align-btn').forEach(btn => {
                 btn.addEventListener('mousedown', (e) => {
                     captureCurrentSelection();
@@ -962,7 +1246,7 @@
                 if (state === 'unsaved') {
                     if (!workspaceHandle) {
                         saveStatusIndicator.className = "flex items-center gap-1.5 text-[10px] uppercase font-bold text-slate-500 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded-full shadow-sm";
-                        saveStatusIndicator.innerHTML = `<span>Unsaved (Connect Folder)</span>`;
+                        saveStatusIndicator.innerHTML = `<span>Default Mode (Connect Folder)</span>`;
                     } else {
                         saveStatusIndicator.className = "flex items-center gap-1.5 text-[10px] uppercase font-bold text-amber-700 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full shadow-sm";
                         saveStatusIndicator.innerHTML = `<span>Unsaved Changes</span>`;
@@ -1006,6 +1290,7 @@
                         targetHandle = await workspaceHandle.getFileHandle(filename, { create: true });
                         currentFileHandle = targetHandle;
                         activeDocTitle.innerText = filename;
+                        localStorage.setItem(LS_LAST_OPENED_FILE_KEY, filename);
                     }
 
                     const writable = await targetHandle.createWritable();
@@ -1027,7 +1312,6 @@
 
             const MARKER_CLASSES = ['marker-green', 'marker-pink', 'marker-yellow', 'marker-blue', 'marker-purple'];
 
-            // Apply realistic slanted marker highlight to selected text
             markerBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const range = getActiveOrSavedRange();
@@ -1067,7 +1351,6 @@
                 });
             });
 
-            // Eraser: Remove Marker Highlight from selected text
             clearHighlightBtn.addEventListener('click', () => {
                 const range = getActiveOrSavedRange();
                 const sel = window.getSelection();
@@ -1097,7 +1380,6 @@
                 notifyContentChanged();
             });
 
-            // Insert Numbered Circle + Highlighted Topic Heading at Exact Cursor Line
             const cycleMarkers = ['marker-yellow', 'marker-pink', 'marker-green', 'marker-blue'];
             insertTopicHeadingBtn.addEventListener('click', async () => {
                 dropPhysicalCursorBookmark();
@@ -1120,7 +1402,6 @@
                 insertBlockAtCursor(html);
             });
 
-            // Insert Outlined Pill Box Inline at Exact Cursor Position
             insertPillBoxBtn.addEventListener('click', async () => {
                 const range = getActiveOrSavedRange();
                 if (!range.collapsed) {
@@ -1145,19 +1426,16 @@
                 }
             });
 
-            // Insert Framed Box for Code or Side Notes at Exact Cursor Line
             insertCardBoxBtn.addEventListener('click', () => {
                 const html = `<div class="note-card-box"><div>// Write code snippet or key example here</div></div>`;
                 insertBlockAtCursor(html);
             });
 
-            // Insert Lightbulb Tip Banner at Exact Cursor Line
             insertTipBtn.addEventListener('click', () => {
                 const html = `<div><span class="note-tip-box">💡 Tip: Write your key takeaway or interview tip here!</span></div>`;
                 insertBlockAtCursor(html);
             });
 
-            // Insert Tilted Pink Sticky Note at Exact Cursor Line (Uses flex-end row instead of float so it stays at cursor line)
             insertStickyBtn.addEventListener('click', () => {
                 const html = `<div class="note-sticky-row"><div class="note-sticky" contenteditable="true">Important<br>Note! :)</div></div>`;
                 insertBlockAtCursor(html);
@@ -1165,7 +1443,6 @@
 
             // =========================================================================
 
-            // Enable Tab key support
             editor.addEventListener('keydown', (e) => {
                 if (e.key === 'Tab') {
                     e.preventDefault();
@@ -1447,30 +1724,24 @@
                 indexDebounceTimer = setTimeout(parseDynamicIndex, 300);
             });
 
-            setTimeout(parseDynamicIndex, 200);
-
+            // Connect Workspace Button Handler
             connectFolderBtn.addEventListener('click', async () => {
                 try {
                     if (!window.showDirectoryPicker) {
                         showMessage("Directory Picker API is not supported in this browser. Please use Chrome or Edge.", true);
                         return;
                     }
-                    workspaceHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-                    currentFolderName.innerText = workspaceHandle.name;
-                    folderBanner.classList.remove('hidden');
-                    sidebarActions.classList.remove('opacity-50', 'pointer-events-none');
-
-                    await loadWorkspaceTree();
-                    switchTab('files');
-                    setSaveState(hasUnsavedChanges ? 'unsaved' : 'saved');
-                    showMessage("Workspace folder connected!");
+                    const selectedHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                    currentFileHandle = null;
+                    await activateWorkspaceHandle(selectedHandle, true);
+                    showMessage(`Connected & saved path "/${selectedHandle.name}"!`);
                 } catch (err) {
                     if (err.name !== 'AbortError') showMessage("Folder connect failed: " + err.message, true);
                 }
             });
 
             async function loadWorkspaceTree() {
-                if (!workspaceHandle) return;
+                if (!workspaceHandle) return [];
                 fileTreeContainer.innerHTML = '';
 
                 try {
@@ -1478,22 +1749,29 @@
                     for await (const entry of workspaceHandle.values()) entries.push(entry);
                     entries.sort((a, b) => a.kind === b.kind ? a.name.localeCompare(b.name) : (a.kind === 'directory' ? -1 : 1));
 
+                    const fileCount = entries.filter(e => e.kind === 'file').length;
+                    const dirCount = entries.filter(e => e.kind === 'directory').length;
+                    updateConnectedPathUI(fileCount, dirCount);
+
                     if (entries.length === 0) {
-                        fileTreeContainer.innerHTML = `<div class="text-xs text-slate-500 italic py-4 text-center">Folder is empty</div>`;
-                        return;
+                        fileTreeContainer.innerHTML = `<div class="text-xs text-slate-500 italic py-4 text-center">Folder is empty. Click "+ New Note" above.</div>`;
+                        return entries;
                     }
 
                     for (const entry of entries) {
                         fileTreeContainer.appendChild(createTreeItemElement(entry));
                     }
+                    return entries;
                 } catch (err) {
                     showMessage("Error scanning directory: " + err.message, true);
+                    return [];
                 }
             }
 
             function createTreeItemElement(entry) {
                 const div = document.createElement('div');
-                div.className = 'group flex items-center justify-between p-2 hover:bg-slate-800 rounded-lg text-xs cursor-pointer text-slate-300 transition-colors';
+                const isActive = currentFileHandle && currentFileHandle.name === entry.name;
+                div.className = `group flex items-center justify-between p-2 rounded-lg text-xs cursor-pointer transition-colors ${isActive ? 'bg-blue-950/80 text-blue-300 border border-blue-800/60' : 'hover:bg-slate-800 text-slate-300'}`;
                 const isDir = entry.kind === 'directory';
                 div.innerHTML = `
                     <div class="flex items-center gap-2 truncate pr-2 flex-grow">
@@ -1521,6 +1799,10 @@
                     const confirmDel = await promptUser("Delete File", `Type "DELETE" to remove ${entry.name}:`, "");
                     if (confirmDel === "DELETE") {
                         await workspaceHandle.removeEntry(entry.name, { recursive: true });
+                        if (currentFileHandle && currentFileHandle.name === entry.name) {
+                            currentFileHandle = null;
+                            localStorage.removeItem(LS_LAST_OPENED_FILE_KEY);
+                        }
                         showMessage(`Deleted ${entry.name}`);
                         await loadWorkspaceTree();
                     }
@@ -1537,6 +1819,11 @@
                     activeDocTitle.innerText = fileHandle.name;
                     editor.innerHTML = contents;
                     savedRange = null;
+
+                    // Save active file name in localStorage and update path showcase
+                    localStorage.setItem(LS_LAST_OPENED_FILE_KEY, fileHandle.name);
+                    await loadWorkspaceTree();
+
                     parseDynamicIndex();
                     showMessage(`Opened "${fileHandle.name}"`);
                     hasUnsavedChanges = false;
@@ -1555,6 +1842,11 @@
                     await writable.write(content);
                     await writable.close();
                     await workspaceHandle.removeEntry(oldEntry.name);
+                    if (currentFileHandle && currentFileHandle.name === oldEntry.name) {
+                        currentFileHandle = newFileHandle;
+                        activeDocTitle.innerText = newName;
+                        localStorage.setItem(LS_LAST_OPENED_FILE_KEY, newName);
+                    }
                     await loadWorkspaceTree();
                 }
             }
@@ -1566,6 +1858,7 @@
                     const newHandle = await workspaceHandle.getFileHandle(fileName, { create: true });
                     currentFileHandle = newHandle;
                     activeDocTitle.innerText = fileName;
+                    localStorage.setItem(LS_LAST_OPENED_FILE_KEY, fileName);
                     editor.innerHTML = `<div style="text-align: center; font-size: 26px; font-weight: 700;"><span class="marker-green">${fileName.replace('.html', '')}</span></div><div data-heading="true"><span class="note-num-badge">1</span> <span class="marker-yellow" style="font-weight: 700;">First Topic</span></div><div>* Point one</div>`;
                     savedRange = null;
                     const writable = await newHandle.createWritable();
@@ -1618,7 +1911,7 @@
                 await executeAutoSave();
             });
 
-            // Diagram Builder Logic (Inserts at exact cursor line)
+            // Diagram Builder Logic
             let draggedShape = null;
             let dragOffsetX = 0;
             let dragOffsetY = 0;
@@ -1805,6 +2098,9 @@
                     downloadBtn.disabled = false;
                 }
             });
+
+            // Run startup check for saved workspace path
+            checkSavedWorkspaceOnStartup();
         });
     </script>
 </body>
