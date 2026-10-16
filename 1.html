@@ -18,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <style>
@@ -66,7 +66,7 @@
             z-index: 1000;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            background-color: rgba(255, 255, 255, 0.92);
+            background-color: rgba(255, 255, 255, 0.94);
             border-bottom: 1px solid rgba(226, 232, 240, 0.8);
             box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
         }
@@ -133,6 +133,129 @@
             border-radius: 8px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             margin: 16px auto;
+        }
+
+        /* =========================================================
+           HANDWRITTEN STUDY NOTE HIGHLIGHT & BADGE STYLES
+           ========================================================= */
+
+        /* Realistic Slanted Marker Highlights */
+        .marker-green {
+            background: linear-gradient(104deg, rgba(163, 230, 53, 0) 0.9%, rgba(163, 230, 53, 0.72) 2.4%, rgba(163, 230, 53, 0.55) 5.8%, rgba(163, 230, 53, 0.65) 93%, rgba(163, 230, 53, 0.7) 96%, rgba(163, 230, 53, 0) 98%);
+            padding: 2px 8px;
+            border-radius: 6px 3px 6px 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .marker-pink {
+            background: linear-gradient(104deg, rgba(244, 114, 182, 0) 0.9%, rgba(249, 168, 212, 0.78) 2.4%, rgba(249, 168, 212, 0.6) 5.8%, rgba(249, 168, 212, 0.72) 93%, rgba(249, 168, 212, 0.78) 96%, rgba(244, 114, 182, 0) 98%);
+            padding: 2px 8px;
+            border-radius: 6px 3px 6px 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .marker-yellow {
+            background: linear-gradient(104deg, rgba(250, 204, 21, 0) 0.9%, rgba(253, 224, 71, 0.82) 2.4%, rgba(253, 224, 71, 0.65) 5.8%, rgba(253, 224, 71, 0.75) 93%, rgba(253, 224, 71, 0.8) 96%, rgba(250, 204, 21, 0) 98%);
+            padding: 2px 8px;
+            border-radius: 6px 3px 6px 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .marker-blue {
+            background: linear-gradient(104deg, rgba(96, 165, 250, 0) 0.9%, rgba(147, 197, 253, 0.78) 2.4%, rgba(147, 197, 253, 0.6) 5.8%, rgba(147, 197, 253, 0.72) 93%, rgba(147, 197, 253, 0.78) 96%, rgba(96, 165, 250, 0) 98%);
+            padding: 2px 8px;
+            border-radius: 6px 3px 6px 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .marker-purple {
+            background: linear-gradient(104deg, rgba(192, 132, 252, 0) 0.9%, rgba(216, 180, 254, 0.78) 2.4%, rgba(216, 180, 254, 0.6) 5.8%, rgba(216, 180, 254, 0.72) 93%, rgba(216, 180, 254, 0.78) 96%, rgba(192, 132, 252, 0) 98%);
+            padding: 2px 8px;
+            border-radius: 6px 3px 6px 4px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        /* Circular Number Badge (1, 2, 3...) */
+        .note-num-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid #1e293b;
+            background-color: #93c5fd;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1;
+            margin-right: 6px;
+            vertical-align: middle;
+            box-shadow: 1px 1px 0px #1e293b;
+        }
+
+        /* Outlined Pill Box (e.g. Stateless, Common Codes:, 200) */
+        .note-pill-box {
+            display: inline-block;
+            border: 1.8px solid #334155;
+            border-radius: 6px;
+            padding: 0px 8px;
+            line-height: 24px;
+            background-color: rgba(255, 255, 255, 0.85);
+            font-weight: 700;
+            margin: 0 3px;
+            box-shadow: 1px 1px 0px rgba(30, 41, 59, 0.25);
+        }
+
+        /* Code / Note Framed Container */
+        .note-card-box {
+            border: 2px solid #3b82f6;
+            border-radius: 10px;
+            padding: 8px 16px;
+            margin: 6px 0;
+            background-color: rgba(255, 255, 255, 0.55);
+            position: relative;
+        }
+
+        /* Yellow Tip Banner */
+        .note-tip-box {
+            display: inline-block;
+            background: linear-gradient(104deg, rgba(254, 240, 138, 0.85) 2%, rgba(253, 224, 71, 0.75) 98%);
+            border: 1.5px solid #eab308;
+            border-radius: 8px;
+            padding: 1px 12px;
+            margin: 4px 0;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Pink Sticky Note Wrapper & Card (Stays at exact line where inserted) */
+        .note-sticky-row {
+            display: flex;
+            justify-content: flex-end;
+            margin: 4px 0;
+            pointer-events: auto;
+        }
+
+        .note-sticky {
+            width: 155px;
+            background: #fbcfe8;
+            border: 1px solid #f472b6;
+            padding: 10px 12px;
+            transform: rotate(-2.5deg);
+            box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.12);
+            line-height: 22px;
+            text-align: center;
+            font-weight: 700;
+            color: #831843;
+            border-radius: 2px 2px 10px 2px;
+            z-index: 20;
+            position: relative;
         }
 
         /* Target Element Glowing Pulse Animation on Index Click Scroll */
@@ -406,10 +529,9 @@
         <div id="tabIndexContent" class="flex-grow flex flex-col min-h-0 hidden">
             <!-- Index Guide Banner -->
             <div class="p-3 bg-slate-950/60 border-b border-slate-800 text-[11px] text-slate-400 leading-snug">
-                Type <code class="text-blue-400 font-bold bg-slate-800 px-1 rounded">&gt;&gt; </code> for Primary Headings<br>
+                Type <code class="text-blue-400 font-bold bg-slate-800 px-1 rounded">&gt;&gt; </code> or insert <code class="text-emerald-400 font-bold bg-slate-800 px-1 rounded">① Topic</code> for Primary Headings<br>
                 Type <code class="text-amber-400 font-bold bg-slate-800 px-1 rounded">* </code> for Sub-points.<br>
-                Type <code class="text-slate-300 font-bold bg-slate-800 px-1 rounded">- </code> for Indented Notes (Not indexed).<br>
-                <span class="text-slate-300 font-medium">Use Shift+Enter for heavily indented multiline text!</span>
+                Type <code class="text-slate-300 font-bold bg-slate-800 px-1 rounded">- </code> for Indented Notes.
             </div>
 
             <!-- Outline Tree Scroll Container -->
@@ -424,7 +546,7 @@
         <div
             class="p-3 border-t border-slate-800 text-[11px] text-slate-500 text-center flex items-center justify-between">
             <span>Notebook Pro</span>
-            <span class="text-slate-600">&bull; Dynamic Outline</span>
+            <span class="text-slate-600">&bull; Study Marker Edition</span>
         </div>
     </aside>
 
@@ -433,118 +555,112 @@
 
         <!-- ALWAYS STICKY PINNED TOP FORMATTING TOOLBAR -->
         <header id="main-toolbar"
-            class="editor-toolbar flex-shrink-0 px-6 py-3 flex flex-wrap justify-between items-center gap-4">
+            class="editor-toolbar flex-shrink-0 px-5 py-2.5 flex flex-col gap-2">
 
-            <div class="flex items-center gap-4 flex-wrap">
-                <!-- Active File Title Display & Dynamic Animated Save Status Badge -->
-                <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
-                    <span id="activeDocTitle"
-                        class="text-sm font-bold text-slate-800 tracking-tight">collection.html</span>
-                    
-                    <!-- Dynamic Animated Save Indicator -->
-                    <div id="saveStatusIndicator" class="flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full transition-all duration-300">
-                        <!-- Content dynamically updated via JS -->
+            <!-- Top Row: File Title, Pen Colors, Marker Highlights, Alignment & Actions -->
+            <div class="flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <!-- Active File Title Display & Dynamic Animated Save Status Badge -->
+                    <div class="flex items-center gap-2 pr-2 border-r border-slate-200">
+                        <span id="activeDocTitle"
+                            class="text-sm font-bold text-slate-800 tracking-tight">SpringBoot_Notes.html</span>
+                        <div id="saveStatusIndicator" class="flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full transition-all duration-300"></div>
+                    </div>
+
+                    <!-- Pen Ink Color Swatches -->
+                    <div class="flex items-center gap-1.5" title="Pen Ink Colors">
+                        <span class="text-[10px] font-bold uppercase text-slate-400 mr-0.5">Pen:</span>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-slate-900 hover:scale-110 transition-transform" data-color="#111827" title="Black Ink"></button>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-blue-600 hover:scale-110 transition-transform" data-color="#2563eb" title="Blue Ink"></button>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-red-600 hover:scale-110 transition-transform" data-color="#dc2626" title="Red Ink"></button>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-emerald-600 hover:scale-110 transition-transform" data-color="#16a34a" title="Green Ink"></button>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-purple-600 hover:scale-110 transition-transform" data-color="#9333ea" title="Purple Ink"></button>
+                        <button type="button" class="color-btn w-4 h-4 rounded-full bg-orange-600 hover:scale-110 transition-transform" data-color="#ea580c" title="Orange Ink"></button>
+                    </div>
+
+                    <!-- Pastel Highlighter Marker Swatches -->
+                    <div class="flex items-center gap-1.5 border-l border-slate-200 pl-3" title="Select text and click a marker color">
+                        <span class="text-[10px] font-bold uppercase text-slate-400 mr-0.5">🖍️ Highlight:</span>
+                        <button type="button" class="marker-btn w-5 h-5 rounded-md bg-lime-300 border border-lime-500 hover:scale-110 transition-transform shadow-sm" data-marker="marker-green" title="Green Marker Highlight"></button>
+                        <button type="button" class="marker-btn w-5 h-5 rounded-md bg-pink-300 border border-pink-400 hover:scale-110 transition-transform shadow-sm" data-marker="marker-pink" title="Pink Marker Highlight"></button>
+                        <button type="button" class="marker-btn w-5 h-5 rounded-md bg-yellow-300 border border-yellow-500 hover:scale-110 transition-transform shadow-sm" data-marker="marker-yellow" title="Yellow Marker Highlight"></button>
+                        <button type="button" class="marker-btn w-5 h-5 rounded-md bg-blue-300 border border-blue-400 hover:scale-110 transition-transform shadow-sm" data-marker="marker-blue" title="Blue Marker Highlight"></button>
+                        <button type="button" class="marker-btn w-5 h-5 rounded-md bg-purple-300 border border-purple-400 hover:scale-110 transition-transform shadow-sm" data-marker="marker-purple" title="Purple Marker Highlight"></button>
+                        <button type="button" id="clearHighlightBtn" class="px-1.5 py-0.5 text-[10px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300 rounded transition-colors" title="Remove Highlight from Selected Text">Eraser</button>
+                    </div>
+
+                    <!-- Text Alignment Commands -->
+                    <div class="flex items-center gap-0.5 border-l border-slate-200 pl-2">
+                        <button type="button" class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded" data-align="justifyLeft" title="Align Left">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16"></path></svg>
+                        </button>
+                        <button type="button" class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded" data-align="justifyCenter" title="Align Center">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M4 18h16"></path></svg>
+                        </button>
+                        <button type="button" class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded" data-align="justifyRight" title="Align Right">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M4 18h16"></path></svg>
+                        </button>
+                        <button type="button" class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded" data-align="justifyFull" title="Justify">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Color Palette Swatches -->
+                <!-- Header Action Buttons -->
                 <div class="flex items-center gap-1.5">
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-slate-900 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-slate-400"
-                        data-color="#111827" title="Black"></button>
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-blue-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-blue-400"
-                        data-color="#2563eb" title="Blue"></button>
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-red-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-red-400"
-                        data-color="#dc2626" title="Red"></button>
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-emerald-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-emerald-400"
-                        data-color="#16a34a" title="Green"></button>
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-purple-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-purple-400"
-                        data-color="#9333ea" title="Purple"></button>
-                    <button
-                        class="color-btn w-5 h-5 rounded-full bg-orange-600 border-2 border-transparent hover:scale-110 transition-transform focus:ring-2 focus:ring-orange-400"
-                        data-color="#ea580c" title="Orange"></button>
-                </div>
-
-                <!-- Text Alignment Commands -->
-                <div class="flex items-center gap-1 border-l border-slate-200 pl-3">
-                    <button
-                        class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors"
-                        data-align="justifyLeft" title="Align Left">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h10M4 18h16"></path>
-                        </svg>
+                    <button type="button" id="importClipsBtn"
+                        class="flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors shadow-sm"
+                        title="Import Clipped Web Items">
+                        ✂️ Clips
                     </button>
-                    <button
-                        class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors"
-                        data-align="justifyCenter" title="Align Center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M7 12h10M4 18h16"></path>
-                        </svg>
+                    <button type="button" id="addDiagramBtn"
+                        class="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors shadow-sm">
+                        + Diagram
                     </button>
-                    <button
-                        class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors"
-                        data-align="justifyRight" title="Align Right">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M10 12h10M4 18h16"></path>
-                        </svg>
+                    <button type="button" id="saveHtmlBtn"
+                        class="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors shadow-sm">
+                        💾 Save
                     </button>
-                    <button
-                        class="align-btn p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded transition-colors"
-                        data-align="justifyFull" title="Justify">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
+                    <button type="button" id="downloadBtn"
+                        class="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors shadow-sm">
+                        📥 PDF
                     </button>
                 </div>
             </div>
 
-            <!-- Header Action Buttons -->
-            <div class="flex items-center gap-2">
-                <!-- Web Clipper Import Button -->
-                <button id="importClipsBtn"
-                    class="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm"
-                    title="Import Clipped Web Items">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
-                        </path>
-                    </svg>
-                    ✂️ Import Clips
+            <!-- Second Row: Study Note Aesthetic Widgets (From Reference Photos) -->
+            <div class="flex items-center gap-2 pt-1.5 border-t border-slate-200/80 text-xs flex-wrap">
+                <span class="text-[10px] font-bold uppercase text-slate-400">Insert at Cursor:</span>
+
+                <button type="button" id="insertTopicHeadingBtn"
+                    class="widget-btn px-2.5 py-1 bg-yellow-100 hover:bg-yellow-200 text-slate-800 border border-yellow-400 rounded-md text-[11px] font-bold flex items-center gap-1 transition-colors shadow-sm"
+                    title="Insert Numbered Topic Heading with Marker Highlight at Cursor">
+                    <span class="w-4 h-4 rounded-full bg-blue-300 border border-slate-800 text-[10px] flex items-center justify-center font-bold">1</span>
+                    <span>+ Highlighted Topic</span>
                 </button>
 
-                <button id="addDiagramBtn"
-                    class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    + Diagram
+                <button type="button" id="insertPillBoxBtn"
+                    class="widget-btn px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-800 border border-slate-400 rounded-md text-[11px] font-semibold transition-colors shadow-sm"
+                    title="Wrap selected text or insert an outlined Pill Label at Cursor">
+                    🏷️ Outlined Pill
                 </button>
 
-                <button id="saveHtmlBtn"
-                    class="flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
-                        </path>
-                    </svg>
-                    💾 Save Note
+                <button type="button" id="insertCardBoxBtn"
+                    class="widget-btn px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-md text-[11px] font-semibold transition-colors shadow-sm"
+                    title="Insert Framed Box for Code or Comparison Notes at Cursor">
+                    📦 Framed Box
                 </button>
 
-                <button id="downloadBtn"
-                    class="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
-                    📥 Export PDF
+                <button type="button" id="insertTipBtn"
+                    class="widget-btn px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-md text-[11px] font-semibold transition-colors shadow-sm"
+                    title="Insert Lightbulb Tip Callout at Cursor">
+                    💡 Tip Banner
+                </button>
+
+                <button type="button" id="insertStickyBtn"
+                    class="widget-btn px-2.5 py-1 bg-pink-100 hover:bg-pink-200 text-pink-900 border border-pink-300 rounded-md text-[11px] font-semibold transition-colors shadow-sm"
+                    title="Insert Tilted Pink Sticky Note at Cursor">
+                    📌 Pink Sticky
                 </button>
             </div>
         </header>
@@ -554,16 +670,23 @@
             <div class="notebook-container" id="pdf-target">
                 <div class="paper-bg">
                     <div id="editor" contenteditable="true" spellcheck="false">
-                        <div>>> Getting Started with Notebook Pro</div>
-                        <div>* Use '>> ' to trigger primary headings</div>
-                        <div>* Use '* ' to add nested sub-points</div>
-                        <div>- Use '- ' for deep indent block notes (Excluded from Index Outline)</div>
-                        <div>* Watch the Index tab update live in real-time</div>
+                        <div class="note-sticky-row"><div class="note-sticky" contenteditable="true">Clean Code<br>Happy Developers :)</div></div>
+                        <div style="text-align: center; font-size: 28px; font-weight: 700;"><span class="marker-green">Global Exception Handling</span></div>
+                        <div style="text-align: center; font-size: 26px; font-weight: 700;">in <span class="marker-pink">Spring Boot</span></div>
+                        <div style="text-align: center; color: #1d4ed8;">"Handle <u>errors</u> <u>once</u>, not <u>everywhere</u>!"</div>
                         <div><br></div>
-                        <div>>> Workspace Features</div>
-                        <div>* Connect local folders using File System Access API</div>
-                        <div>* Interactive diagrams with resizable shapes & connections</div>
-                        <div>* Direct clipboard image pasting (Ctrl + V)</div>
+                        <div data-heading="true"><span class="note-num-badge">1</span> <span class="marker-yellow" style="font-weight: 700;">What is Global Exception Handling ?</span></div>
+                        <div>* A centralized way to handle exceptions across the application using <span style="color: #0f766e; font-weight: 700;">@RestControllerAdvice</span> and <span style="color: #0f766e; font-weight: 700;">@ExceptionHandler</span>.</div>
+                        <div><br></div>
+                        <div data-heading="true"><span class="note-num-badge">2</span> <span class="marker-pink" style="font-weight: 700;">Why Do We Need It ?</span></div>
+                        <div>* ✅ Avoid repeated try-catch blocks</div>
+                        <div>* ✅ Centralized error handling &amp; cleaner controller code</div>
+                        <div>* ✅ Consistent API responses &amp; improved security</div>
+                        <div><br></div>
+                        <div data-heading="true"><span class="note-num-badge">3</span> <span class="marker-green" style="font-weight: 700;">HTTP Status Codes &amp; Stateless Design</span></div>
+                        <div>* <span class="note-pill-box">Common Codes:</span> <span class="note-pill-box" style="color: #15803d;">200</span> OK &rarr; Request Successful | <span class="note-pill-box" style="color: #b91c1c;">404</span> Not Found</div>
+                        <div class="note-card-box"><div style="color: #0f766e; font-weight: 700;">@RestControllerAdvice</div><div style="color: #1d4ed8;">public class <span style="color: #0f172a;">GlobalExceptionHandler { ... }</span></div></div>
+                        <div><span class="note-tip-box">💡 Tip: A well-handled exception today makes a more reliable application tomorrow!</span></div>
                     </div>
                 </div>
             </div>
@@ -579,9 +702,9 @@
             <input type="text" id="modalInput"
                 class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm mb-4 outline-none focus:ring-2 focus:ring-blue-500">
             <div class="flex justify-end gap-2">
-                <button id="modalCancelBtn"
+                <button type="button" id="modalCancelBtn"
                     class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">Cancel</button>
-                <button id="modalConfirmBtn"
+                <button type="button" id="modalConfirmBtn"
                     class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors">Confirm</button>
             </div>
         </div>
@@ -595,6 +718,8 @@
             // Core UI Elements
             const editor = document.getElementById('editor');
             const colorBtns = document.querySelectorAll('.color-btn');
+            const markerBtns = document.querySelectorAll('.marker-btn');
+            const clearHighlightBtn = document.getElementById('clearHighlightBtn');
             const alignBtns = document.querySelectorAll('.align-btn');
             const addDiagramBtn = document.getElementById('addDiagramBtn');
             const downloadBtn = document.getElementById('downloadBtn');
@@ -602,6 +727,13 @@
             const connectFolderBtn = document.getElementById('connectFolderBtn');
             const importClipsBtn = document.getElementById('importClipsBtn');
             const saveStatusIndicator = document.getElementById('saveStatusIndicator');
+
+            // Study Note Widget Buttons
+            const insertTopicHeadingBtn = document.getElementById('insertTopicHeadingBtn');
+            const insertPillBoxBtn = document.getElementById('insertPillBoxBtn');
+            const insertCardBoxBtn = document.getElementById('insertCardBoxBtn');
+            const insertTipBtn = document.getElementById('insertTipBtn');
+            const insertStickyBtn = document.getElementById('insertStickyBtn');
 
             // Sidebar Tabs Elements
             const tabFilesBtn = document.getElementById('tabFilesBtn');
@@ -638,9 +770,192 @@
             let hasUnsavedChanges = false;
             let savedFadeTimeout = null;
 
-            const AUTO_SAVE_DELAY = 1000; // 1 second debounce pause
+            const AUTO_SAVE_DELAY = 1000;
 
-            // UI Helper to manage the dynamic Save Status Indicator Animation & Text
+            // =========================================================================
+            // ROCK-SOLID CURSOR BOOKMARK & LINE-AWARE INSERTION ENGINE
+            // Never resets to the top of #editor even after modal popups
+            // =========================================================================
+            let savedRange = null;
+
+            function captureCurrentSelection() {
+                // Do not overwrite savedRange while modal is open
+                if (!customModal.classList.contains('hidden')) return;
+
+                const sel = window.getSelection();
+                if (sel && sel.rangeCount > 0) {
+                    const range = sel.getRangeAt(0);
+                    if (editor.contains(range.commonAncestorContainer)) {
+                        savedRange = range.cloneRange();
+                    }
+                }
+            }
+
+            editor.addEventListener('mouseup', captureCurrentSelection);
+            editor.addEventListener('keyup', captureCurrentSelection);
+            editor.addEventListener('input', captureCurrentSelection);
+            document.addEventListener('selectionchange', () => {
+                if (document.activeElement === editor) {
+                    captureCurrentSelection();
+                }
+            });
+
+            // Drops a physical invisible DOM marker `<span id="cursor-bookmark-marker">` at the exact cursor
+            function dropPhysicalCursorBookmark() {
+                removePhysicalCursorBookmark();
+                const range = getActiveOrSavedRange();
+                const marker = document.createElement('span');
+                marker.id = 'cursor-bookmark-marker';
+                marker.style.display = 'inline-block';
+                marker.style.width = '0px';
+                marker.style.height = '0px';
+                marker.style.overflow = 'hidden';
+                range.collapse(false);
+                range.insertNode(marker);
+            }
+
+            function removePhysicalCursorBookmark() {
+                const existing = document.getElementById('cursor-bookmark-marker');
+                if (existing) existing.remove();
+            }
+
+            // Returns a guaranteed Range inside #editor without calling editor.focus() first
+            function getActiveOrSavedRange() {
+                const bookmark = document.getElementById('cursor-bookmark-marker');
+                if (bookmark && editor.contains(bookmark)) {
+                    const r = document.createRange();
+                    r.setStartBefore(bookmark);
+                    r.collapse(true);
+                    return r;
+                }
+
+                const sel = window.getSelection();
+                if (sel && sel.rangeCount > 0) {
+                    const currentRange = sel.getRangeAt(0);
+                    if (editor.contains(currentRange.commonAncestorContainer)) {
+                        return currentRange;
+                    }
+                }
+
+                if (savedRange && editor.contains(savedRange.commonAncestorContainer)) {
+                    return savedRange.cloneRange();
+                }
+
+                // Fallback: end of editor (never top of editor!)
+                const endRange = document.createRange();
+                endRange.selectNodeContents(editor);
+                endRange.collapse(false);
+                return endRange;
+            }
+
+            function setCaretAfterNode(node) {
+                if (!node) return;
+                const sel = window.getSelection();
+                const newRange = document.createRange();
+
+                if (node.nodeType === 1 && (node.tagName === 'DIV' || node.tagName === 'P')) {
+                    newRange.selectNodeContents(node);
+                    newRange.collapse(false);
+                } else {
+                    newRange.setStartAfter(node);
+                    newRange.collapse(true);
+                }
+
+                sel.removeAllRanges();
+                sel.addRange(newRange);
+                savedRange = newRange.cloneRange();
+            }
+
+            // Find the top-level line block (direct child of #editor) where a node lives
+            function getTopLevelLineBlock(node) {
+                let curr = node;
+                while (curr && curr.parentNode !== editor && curr !== editor) {
+                    curr = curr.parentNode;
+                }
+                return (curr && curr.parentNode === editor) ? curr : null;
+            }
+
+            // 1. Insert INLINE HTML (e.g., Outlined Pill, Tab spaces) right inside the active text line
+            function insertInlineAtCursor(htmlString) {
+                const range = getActiveOrSavedRange();
+                removePhysicalCursorBookmark();
+
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+
+                range.deleteContents();
+
+                const temp = document.createElement('div');
+                temp.innerHTML = htmlString;
+                const frag = document.createDocumentFragment();
+                let lastNode = null;
+                while (temp.firstChild) {
+                    lastNode = temp.firstChild;
+                    frag.appendChild(lastNode);
+                }
+
+                range.insertNode(frag);
+                if (lastNode) setCaretAfterNode(lastNode);
+
+                notifyContentChanged();
+                parseDynamicIndex();
+            }
+
+            // 2. Insert BLOCK HTML (e.g., Highlighted Topic, Framed Box, Tip Banner, Sticky, Diagram)
+            // Inserts cleanly at or right after the exact line block where the cursor is pointing
+            function insertBlockAtCursor(htmlString) {
+                const range = getActiveOrSavedRange();
+                const anchorNode = range.startContainer;
+                const currentLineBlock = getTopLevelLineBlock(anchorNode);
+                removePhysicalCursorBookmark();
+
+                const temp = document.createElement('div');
+                temp.innerHTML = htmlString;
+                const newBlocks = Array.from(temp.childNodes);
+
+                let lastInserted = null;
+
+                if (currentLineBlock) {
+                    const isCurrentLineEmpty = currentLineBlock.textContent.trim() === '' && !currentLineBlock.querySelector('img, .diagram-board');
+                    let referenceNode = currentLineBlock;
+
+                    newBlocks.forEach(block => {
+                        editor.insertBefore(block, referenceNode.nextSibling);
+                        referenceNode = block;
+                        lastInserted = block;
+                    });
+
+                    // If the line the cursor was on was completely blank, remove the blank line so it replaces it cleanly
+                    if (isCurrentLineEmpty) {
+                        currentLineBlock.remove();
+                    }
+                } else {
+                    // Append at the end if cursor wasn't inside a specific line block
+                    newBlocks.forEach(block => {
+                        editor.appendChild(block);
+                        lastInserted = block;
+                    });
+                }
+
+                if (lastInserted) {
+                    setCaretAfterNode(lastInserted);
+                }
+
+                notifyContentChanged();
+                parseDynamicIndex();
+            }
+
+            // Prevent all toolbar buttons from stealing focus from #editor on mousedown
+            document.querySelectorAll('.widget-btn, #addDiagramBtn, .color-btn, .marker-btn, #clearHighlightBtn, .align-btn').forEach(btn => {
+                btn.addEventListener('mousedown', (e) => {
+                    captureCurrentSelection();
+                    e.preventDefault();
+                });
+            });
+
+            // =========================================================================
+
             function setSaveState(state) {
                 clearTimeout(savedFadeTimeout);
 
@@ -654,19 +969,10 @@
                     }
                 } else if (state === 'saving') {
                     saveStatusIndicator.className = "flex items-center gap-1.5 text-[10px] uppercase font-bold text-blue-700 bg-blue-100 border border-blue-300 px-2 py-0.5 rounded-full shadow-sm animate-pulse";
-                    saveStatusIndicator.innerHTML = `
-                        <svg class="animate-spin h-3 w-3 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>Saving...</span>`;
+                    saveStatusIndicator.innerHTML = `<span>Saving...</span>`;
                 } else if (state === 'saved') {
                     saveStatusIndicator.className = "flex items-center gap-1.5 text-[10px] uppercase font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full shadow-sm transition-opacity duration-500";
-                    saveStatusIndicator.innerHTML = `
-                        <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Saved</span>`;
+                    saveStatusIndicator.innerHTML = `<span>✓ Saved</span>`;
 
                     savedFadeTimeout = setTimeout(() => {
                         if (!hasUnsavedChanges) {
@@ -679,7 +985,6 @@
                 }
             }
 
-            // Core Debounced Auto-Save Core Handler
             function notifyContentChanged() {
                 hasUnsavedChanges = true;
                 setSaveState('unsaved');
@@ -691,9 +996,7 @@
             }
 
             async function executeAutoSave() {
-                if (!workspaceHandle) return;
-                if (!hasUnsavedChanges) return;
-
+                if (!workspaceHandle || !hasUnsavedChanges) return;
                 setSaveState('saving');
 
                 try {
@@ -718,15 +1021,158 @@
                 }
             }
 
-            // Enable Tab key support (inserts 4 spaces without losing focus)
-            editor.addEventListener('keydown', (e) => {
-                if (e.key === 'Tab') {
-                    e.preventDefault();
-                    document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+            // =========================================================================
+            // REALISTIC MARKER HIGHLIGHTER & STUDY NOTE WIDGET LOGIC
+            // =========================================================================
+
+            const MARKER_CLASSES = ['marker-green', 'marker-pink', 'marker-yellow', 'marker-blue', 'marker-purple'];
+
+            // Apply realistic slanted marker highlight to selected text
+            markerBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const range = getActiveOrSavedRange();
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+
+                    if (range.collapsed) {
+                        showMessage("Select some text in your note first to highlight it!");
+                        return;
+                    }
+
+                    const markerClass = btn.getAttribute('data-marker');
+                    const parentEl = range.commonAncestorContainer.nodeType === 1
+                        ? range.commonAncestorContainer
+                        : range.commonAncestorContainer.parentElement;
+
+                    if (parentEl && MARKER_CLASSES.some(c => parentEl.classList.contains(c)) && parentEl.innerText === sel.toString()) {
+                        MARKER_CLASSES.forEach(c => parentEl.classList.remove(c));
+                        parentEl.classList.add(markerClass);
+                        captureCurrentSelection();
+                        notifyContentChanged();
+                        return;
+                    }
+
+                    const span = document.createElement('span');
+                    span.className = markerClass;
+                    try {
+                        range.surroundContents(span);
+                    } catch (err) {
+                        const fragment = range.extractContents();
+                        span.appendChild(fragment);
+                        range.insertNode(span);
+                    }
+                    setCaretAfterNode(span);
+                    notifyContentChanged();
+                });
+            });
+
+            // Eraser: Remove Marker Highlight from selected text
+            clearHighlightBtn.addEventListener('click', () => {
+                const range = getActiveOrSavedRange();
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+
+                let node = range.startContainer;
+                if (node && node.nodeType === 3) node = node.parentElement;
+
+                while (node && node !== editor) {
+                    if (MARKER_CLASSES.some(c => node.classList.contains(c)) || node.classList.contains('note-pill-box')) {
+                        const parent = node.parentNode;
+                        let lastMoved = null;
+                        while (node.firstChild) {
+                            lastMoved = node.firstChild;
+                            parent.insertBefore(lastMoved, node);
+                        }
+                        parent.removeChild(node);
+                        if (lastMoved) setCaretAfterNode(lastMoved);
+                        notifyContentChanged();
+                        return;
+                    }
+                    node = node.parentElement;
+                }
+                document.execCommand('removeFormat', false, null);
+                captureCurrentSelection();
+                notifyContentChanged();
+            });
+
+            // Insert Numbered Circle + Highlighted Topic Heading at Exact Cursor Line
+            const cycleMarkers = ['marker-yellow', 'marker-pink', 'marker-green', 'marker-blue'];
+            insertTopicHeadingBtn.addEventListener('click', async () => {
+                dropPhysicalCursorBookmark();
+                const existingBadges = editor.querySelectorAll('.note-num-badge').length;
+                const nextNum = existingBadges + 1;
+                const chosenMarker = cycleMarkers[(nextNum - 1) % cycleMarkers.length];
+
+                const titleText = await promptUser(
+                    "Insert Highlighted Topic Heading",
+                    `Enter heading title for Topic #${nextNum}:`,
+                    "New Topic Title ?"
+                );
+
+                if (!titleText) {
+                    removePhysicalCursorBookmark();
+                    return;
+                }
+
+                const html = `<div data-heading="true"><span class="note-num-badge">${nextNum}</span> <span class="${chosenMarker}" style="font-weight: 700;">${titleText}</span></div><div>* </div>`;
+                insertBlockAtCursor(html);
+            });
+
+            // Insert Outlined Pill Box Inline at Exact Cursor Position
+            insertPillBoxBtn.addEventListener('click', async () => {
+                const range = getActiveOrSavedRange();
+                if (!range.collapsed) {
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+
+                    const span = document.createElement('span');
+                    span.className = 'note-pill-box';
+                    span.appendChild(range.extractContents());
+                    range.insertNode(span);
+                    setCaretAfterNode(span);
+                    notifyContentChanged();
+                } else {
+                    dropPhysicalCursorBookmark();
+                    const label = await promptUser("Insert Outlined Pill Label", "Enter pill text (e.g. Purpose:, Stateless, 200):", "Purpose:");
+                    if (label) {
+                        insertInlineAtCursor(`<span class="note-pill-box">${label}</span>&nbsp;`);
+                    } else {
+                        removePhysicalCursorBookmark();
+                    }
                 }
             });
 
-            // Add Ctrl + S / Cmd + S Save Shortcut
+            // Insert Framed Box for Code or Side Notes at Exact Cursor Line
+            insertCardBoxBtn.addEventListener('click', () => {
+                const html = `<div class="note-card-box"><div>// Write code snippet or key example here</div></div>`;
+                insertBlockAtCursor(html);
+            });
+
+            // Insert Lightbulb Tip Banner at Exact Cursor Line
+            insertTipBtn.addEventListener('click', () => {
+                const html = `<div><span class="note-tip-box">💡 Tip: Write your key takeaway or interview tip here!</span></div>`;
+                insertBlockAtCursor(html);
+            });
+
+            // Insert Tilted Pink Sticky Note at Exact Cursor Line (Uses flex-end row instead of float so it stays at cursor line)
+            insertStickyBtn.addEventListener('click', () => {
+                const html = `<div class="note-sticky-row"><div class="note-sticky" contenteditable="true">Important<br>Note! :)</div></div>`;
+                insertBlockAtCursor(html);
+            });
+
+            // =========================================================================
+
+            // Enable Tab key support
+            editor.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    insertInlineAtCursor('&nbsp;&nbsp;&nbsp;&nbsp;');
+                }
+            });
+
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
                     e.preventDefault();
@@ -735,7 +1181,6 @@
                 }
             });
 
-            // Toast Helper Message
             function showMessage(msg, isError = false) {
                 const toast = document.createElement('div');
                 toast.className = `px-4 py-2.5 rounded-lg text-white text-xs font-medium shadow-lg flex items-center gap-2 border transition-all duration-300 ${isError ? 'bg-red-600 border-red-500' : 'bg-slate-800 border-slate-700'}`;
@@ -756,7 +1201,6 @@
                     customModal.classList.remove('hidden');
                     modalInput.focus();
                     modalInput.select();
-
                     modalResolver = resolve;
                 });
             }
@@ -777,7 +1221,6 @@
                 if (e.key === 'Escape') modalCancelBtn.click();
             });
 
-            // Receive incoming clip payload from content script bridge
             window.addEventListener('message', (event) => {
                 if (event.data && event.data.type === 'RECEIVE_NOTEBOOK_CLIPS') {
                     const clips = event.data.clips;
@@ -785,18 +1228,8 @@
                         showMessage("No web clips found to import.", true);
                         return;
                     }
-
-                    clips.forEach(clip => {
-                        editor.insertAdjacentHTML('beforeend', clip.html);
-                    });
-
-                    notifyContentChanged();
-                    parseDynamicIndex();
+                    clips.forEach(clip => insertBlockAtCursor(clip.html));
                     showMessage(`Imported ${clips.length} web clip(s)!`);
-                }
-
-                if (event.data && event.data.type === 'NOTEBOOK_CLIP_ADDED_ALERT') {
-                    showMessage("Clip saved! Click 'Import Clips' in Notebook Pro to view.");
                 }
             });
 
@@ -806,7 +1239,6 @@
                 });
             }
 
-            // Sidebar Tab Switching Logic
             function switchTab(target) {
                 if (target === 'files') {
                     tabFilesBtn.className = "flex-1 py-2.5 px-3 flex items-center justify-center gap-2 text-blue-400 border-b-2 border-blue-500 transition-all bg-slate-900/60 font-semibold";
@@ -836,34 +1268,23 @@
                 });
             }
 
-            // Robust Line Extraction: Queries all leaf block elements inside editor, skipping diagram elements
             function getEditorLineNodes() {
                 ensureEditorNodesWrapped();
-
                 let elements = Array.from(editor.querySelectorAll('div, p, li, h1, h2, h3, h4, h5, h6'));
-
                 elements = elements.filter(el => {
-                    if (el.closest('.diagram-board')) return false;
-                    // Keep only leaf block elements (elements containing no child block tags)
-                    const hasBlockChild = Array.from(el.children).some(child => 
+                    if (el.closest('.diagram-board') || el.closest('.note-sticky-row') || el.classList.contains('note-sticky')) return false;
+                    const hasBlockChild = Array.from(el.children).some(child =>
                         ['DIV', 'P', 'LI', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(child.tagName)
                     );
                     return !hasBlockChild;
                 });
-
-                if (elements.length === 0) {
-                    elements = Array.from(editor.childNodes).filter(n => n.nodeType === Node.ELEMENT_NODE && !n.closest('.diagram-board'));
-                }
-
                 return elements;
             }
 
             function parseDynamicIndex() {
                 if (!editor) return;
-
                 const nodes = getEditorLineNodes();
 
-                // Clear any existing stale idx-node IDs to prevent duplicate ID collisions
                 editor.querySelectorAll('[id^="idx-node-"]').forEach(node => {
                     node.removeAttribute('id');
                 });
@@ -876,16 +1297,12 @@
                     const text = node.textContent || '';
                     const trimmed = text.trim();
 
-                    // Regex Rules:
-                    // >> Primary Heading
-                    // *  Sub-point (using negative lookahead (?!\*) to exclude **bold** formatting)
-                    // -  Indented Note Block
+                    const hasBadge = node.querySelector('.note-num-badge') !== null || node.getAttribute('data-heading') === 'true';
                     const primaryMatch = trimmed.match(/^(?:&gt;&gt;|>>|\u00BB)+\s*(.*)/i);
-                    const subMatch = trimmed.match(/^(?:\*(?!\*)\s*|\u2022\s*)(.*)/);
+                    const subMatch = !hasBadge && trimmed.match(/^(?:\*(?!\*)\s*|\u2022\s*)(.*)/);
                     const randomPointMatch = trimmed.match(/^-\s*(.*)/);
 
-                    // Apply visual hanging indents
-                    if (primaryMatch) {
+                    if (primaryMatch || hasBadge) {
                         node.style.paddingLeft = '0px';
                         node.style.textIndent = '0px';
                     } else if (subMatch) {
@@ -896,13 +1313,12 @@
                         node.style.textIndent = '-120px';
                     }
 
-                    // Build dynamic tree with guaranteed unique sequential IDs
-                    if (primaryMatch || subMatch) {
+                    if (primaryMatch || hasBadge || subMatch) {
                         const targetId = `idx-node-${counter++}`;
                         node.id = targetId;
 
-                        if (primaryMatch) {
-                            const headingTitle = primaryMatch[1] ? primaryMatch[1].trim() : 'Primary Section';
+                        if (primaryMatch || hasBadge) {
+                            const headingTitle = primaryMatch ? primaryMatch[1].trim() : trimmed;
                             currentHeading = {
                                 id: targetId,
                                 title: headingTitle || 'Untitled Section',
@@ -934,9 +1350,7 @@
                 let totalItems = 0;
                 indexData.forEach(item => {
                     totalItems++;
-                    if (item.subs) {
-                        totalItems += item.subs.length;
-                    }
+                    if (item.subs) totalItems += item.subs.length;
                 });
 
                 indexCountBadge.innerText = totalItems;
@@ -948,7 +1362,7 @@
                 if (!indexData || indexData.length === 0) {
                     indexTreeContainer.innerHTML = `
                         <div class="text-center py-12 px-4 text-slate-500 text-xs leading-relaxed">
-                            No headings found yet.<br>Type <span class="text-blue-400 font-semibold">&gt;&gt; Section Name</span> in your notebook to generate dynamic indexes.
+                            No headings found yet.<br>Click <span class="text-yellow-400 font-semibold">+ Highlighted Topic</span> or type <span class="text-blue-400 font-semibold">&gt;&gt; Section</span>.
                         </div>`;
                     return;
                 }
@@ -962,16 +1376,15 @@
                     li.className = 'rounded-lg overflow-hidden bg-slate-950/40 border border-slate-800/80';
 
                     const hasSubs = item.subs && item.subs.length > 0;
-
                     const headingRow = document.createElement('div');
                     headingRow.className = 'flex items-center justify-between p-2 hover:bg-slate-800/80 cursor-pointer text-slate-200 transition-colors group select-none';
 
                     headingRow.innerHTML = `
                         <div class="flex items-center gap-2 truncate pr-2 flex-grow min-w-0">
-                            ${hasSubs ? `<button class="toggle-caret p-1 text-slate-400 hover:text-white hover:bg-slate-700/60 rounded transition-colors flex-shrink-0" title="Collapse/Expand">
+                            ${hasSubs ? `<button class="toggle-caret p-1 text-slate-400 hover:text-white hover:bg-slate-700/60 rounded transition-colors flex-shrink-0">
                                 <svg class="w-3.5 h-3.5 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             </button>` : `<span class="w-3.5 h-3.5 inline-block text-blue-400 font-bold text-center flex-shrink-0">•</span>`}
-                            <span class="font-bold text-slate-100 truncate hover:text-blue-400 transition-colors primary-title-text">${item.title}</span>
+                            <span class="font-bold text-slate-100 truncate hover:text-blue-400 transition-colors">${item.title}</span>
                         </div>
                         ${hasSubs ? `<span class="text-[10px] bg-slate-800 text-slate-400 font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0">${item.subs.length}</span>` : ''}
                     `;
@@ -989,18 +1402,12 @@
 
                         item.subs.forEach(sub => {
                             const subLi = document.createElement('li');
-                            subLi.className = 'py-1 px-2 hover:bg-slate-800/90 rounded cursor-pointer flex flex-col gap-1 transition-colors select-none group/sub';
-                            
-                            const subContent = document.createElement('div');
-                            subContent.className = 'flex items-center gap-2 truncate';
-                            subContent.innerHTML = `<span class="text-amber-400 font-bold flex-shrink-0">*</span><span class="truncate font-medium hover:text-amber-300">${sub.title}</span>`;
-                            
-                            subContent.addEventListener('click', (e) => {
+                            subLi.className = 'py-1 px-2 hover:bg-slate-800/90 rounded cursor-pointer flex items-center gap-2 truncate transition-colors select-none';
+                            subLi.innerHTML = `<span class="text-amber-400 font-bold flex-shrink-0">*</span><span class="truncate font-medium hover:text-amber-300">${sub.title}</span>`;
+                            subLi.addEventListener('click', (e) => {
                                 e.stopPropagation();
                                 scrollToEditorNode(sub.id);
                             });
-                            
-                            subLi.appendChild(subContent);
                             subUl.appendChild(subLi);
                         });
 
@@ -1012,11 +1419,7 @@
                                 e.stopPropagation();
                                 const isHidden = subUl.classList.toggle('hidden');
                                 const svg = toggleBtn.querySelector('svg');
-                                if (isHidden) {
-                                    svg.style.transform = 'rotate(-90deg)';
-                                } else {
-                                    svg.style.transform = 'rotate(0deg)';
-                                }
+                                svg.style.transform = isHidden ? 'rotate(-90deg)' : 'rotate(0deg)';
                             });
                         }
                     }
@@ -1031,26 +1434,17 @@
                 const targetNode = document.getElementById(nodeId);
                 if (targetNode) {
                     targetNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
                     targetNode.classList.remove('highlight-jump');
                     void targetNode.offsetWidth;
                     targetNode.classList.add('highlight-jump');
-
-                    setTimeout(() => {
-                        targetNode.classList.remove('highlight-jump');
-                    }, 2100);
-                } else {
-                    showMessage("Target section not found in document.", true);
+                    setTimeout(() => targetNode.classList.remove('highlight-jump'), 2100);
                 }
             }
 
-            // Editor input listener triggers debounced auto-save & index parser
             editor.addEventListener('input', () => {
                 notifyContentChanged();
                 clearTimeout(indexDebounceTimer);
-                indexDebounceTimer = setTimeout(() => {
-                    parseDynamicIndex();
-                }, 300);
+                indexDebounceTimer = setTimeout(parseDynamicIndex, 300);
             });
 
             setTimeout(parseDynamicIndex, 200);
@@ -1071,9 +1465,7 @@
                     setSaveState(hasUnsavedChanges ? 'unsaved' : 'saved');
                     showMessage("Workspace folder connected!");
                 } catch (err) {
-                    if (err.name !== 'AbortError') {
-                        showMessage("Folder connect failed: " + err.message, true);
-                    }
+                    if (err.name !== 'AbortError') showMessage("Folder connect failed: " + err.message, true);
                 }
             });
 
@@ -1083,14 +1475,8 @@
 
                 try {
                     const entries = [];
-                    for await (const entry of workspaceHandle.values()) {
-                        entries.push(entry);
-                    }
-
-                    entries.sort((a, b) => {
-                        if (a.kind === b.kind) return a.name.localeCompare(b.name);
-                        return a.kind === 'directory' ? -1 : 1;
-                    });
+                    for await (const entry of workspaceHandle.values()) entries.push(entry);
+                    entries.sort((a, b) => a.kind === b.kind ? a.name.localeCompare(b.name) : (a.kind === 'directory' ? -1 : 1));
 
                     if (entries.length === 0) {
                         fileTreeContainer.innerHTML = `<div class="text-xs text-slate-500 italic py-4 text-center">Folder is empty</div>`;
@@ -1098,8 +1484,7 @@
                     }
 
                     for (const entry of entries) {
-                        const itemEl = createTreeItemElement(entry);
-                        fileTreeContainer.appendChild(itemEl);
+                        fileTreeContainer.appendChild(createTreeItemElement(entry));
                     }
                 } catch (err) {
                     showMessage("Error scanning directory: " + err.message, true);
@@ -1109,13 +1494,10 @@
             function createTreeItemElement(entry) {
                 const div = document.createElement('div');
                 div.className = 'group flex items-center justify-between p-2 hover:bg-slate-800 rounded-lg text-xs cursor-pointer text-slate-300 transition-colors';
-
                 const isDir = entry.kind === 'directory';
-                const icon = isDir ? '📁' : '📄';
-
                 div.innerHTML = `
                     <div class="flex items-center gap-2 truncate pr-2 flex-grow">
-                        <span>${icon}</span>
+                        <span>${isDir ? '📁' : '📄'}</span>
                         <span class="truncate item-name font-medium">${entry.name}</span>
                     </div>
                     <div class="hidden group-hover:flex items-center gap-1 flex-shrink-0">
@@ -1125,34 +1507,22 @@
                 `;
 
                 div.querySelector('.item-name').parentElement.addEventListener('click', async () => {
-                    if (!isDir) {
-                        await openFile(entry);
-                    }
+                    if (!isDir) await openFile(entry);
                 });
 
                 div.querySelector('.rename-item').addEventListener('click', async (e) => {
                     e.stopPropagation();
                     const newName = await promptUser("Rename Item", `Enter new name for "${entry.name}":`, entry.name);
-                    if (newName && newName !== entry.name) {
-                        await renameEntry(entry, newName);
-                    }
+                    if (newName && newName !== entry.name) await renameEntry(entry, newName);
                 });
 
                 div.querySelector('.delete-item').addEventListener('click', async (e) => {
                     e.stopPropagation();
                     const confirmDel = await promptUser("Delete File", `Type "DELETE" to remove ${entry.name}:`, "");
                     if (confirmDel === "DELETE") {
-                        try {
-                            await workspaceHandle.removeEntry(entry.name, { recursive: true });
-                            showMessage(`Deleted ${entry.name}`);
-                            if (currentFileHandle && currentFileHandle.name === entry.name) {
-                                currentFileHandle = null;
-                                activeDocTitle.innerText = "Untitled Notebook";
-                            }
-                            await loadWorkspaceTree();
-                        } catch (err) {
-                            showMessage("Could not delete item: " + err.message, true);
-                        }
+                        await workspaceHandle.removeEntry(entry.name, { recursive: true });
+                        showMessage(`Deleted ${entry.name}`);
+                        await loadWorkspaceTree();
                     }
                 });
 
@@ -1163,19 +1533,10 @@
                 try {
                     const file = await fileHandle.getFile();
                     const contents = await file.text();
-
                     currentFileHandle = fileHandle;
                     activeDocTitle.innerText = fileHandle.name;
                     editor.innerHTML = contents;
-
-                    document.querySelectorAll('.diagram-board, .diag-shape').forEach(el => {
-                        shapeResizeObserver.observe(el);
-                    });
-
-                    document.querySelectorAll('.diagram-board').forEach(board => {
-                        updateConnections(board.id);
-                    });
-
+                    savedRange = null;
                     parseDynamicIndex();
                     showMessage(`Opened "${fileHandle.name}"`);
                     hasUnsavedChanges = false;
@@ -1186,28 +1547,15 @@
             }
 
             async function renameEntry(oldEntry, newName) {
-                try {
-                    if (oldEntry.kind === 'file') {
-                        const oldFile = await oldEntry.getFile();
-                        const content = await oldFile.text();
-
-                        const newFileHandle = await workspaceHandle.getFileHandle(newName, { create: true });
-                        const writable = await newFileHandle.createWritable();
-                        await writable.write(content);
-                        await writable.close();
-
-                        await workspaceHandle.removeEntry(oldEntry.name);
-
-                        if (currentFileHandle && currentFileHandle.name === oldEntry.name) {
-                            currentFileHandle = newFileHandle;
-                            activeDocTitle.innerText = newName;
-                        }
-
-                        showMessage(`Renamed to "${newName}"`);
-                        await loadWorkspaceTree();
-                    }
-                } catch (err) {
-                    showMessage("Rename failed: " + err.message, true);
+                if (oldEntry.kind === 'file') {
+                    const oldFile = await oldEntry.getFile();
+                    const content = await oldFile.text();
+                    const newFileHandle = await workspaceHandle.getFileHandle(newName, { create: true });
+                    const writable = await newFileHandle.createWritable();
+                    await writable.write(content);
+                    await writable.close();
+                    await workspaceHandle.removeEntry(oldEntry.name);
+                    await loadWorkspaceTree();
                 }
             }
 
@@ -1215,24 +1563,18 @@
                 if (!workspaceHandle) return;
                 const fileName = await promptUser("New Note File", "Enter file name (e.g., Note.html):", "Note.html");
                 if (fileName) {
-                    try {
-                        const newHandle = await workspaceHandle.getFileHandle(fileName, { create: true });
-                        currentFileHandle = newHandle;
-                        activeDocTitle.innerText = fileName;
-                        editor.innerHTML = '<div>>> New Note Section</div><div>* First point</div>';
-
-                        const writable = await newHandle.createWritable();
-                        await writable.write(editor.innerHTML);
-                        await writable.close();
-
-                        showMessage(`Created "${fileName}"`);
-                        await loadWorkspaceTree();
-                        parseDynamicIndex();
-                        hasUnsavedChanges = false;
-                        setSaveState('saved');
-                    } catch (err) {
-                        showMessage("Failed to create file: " + err.message, true);
-                    }
+                    const newHandle = await workspaceHandle.getFileHandle(fileName, { create: true });
+                    currentFileHandle = newHandle;
+                    activeDocTitle.innerText = fileName;
+                    editor.innerHTML = `<div style="text-align: center; font-size: 26px; font-weight: 700;"><span class="marker-green">${fileName.replace('.html', '')}</span></div><div data-heading="true"><span class="note-num-badge">1</span> <span class="marker-yellow" style="font-weight: 700;">First Topic</span></div><div>* Point one</div>`;
+                    savedRange = null;
+                    const writable = await newHandle.createWritable();
+                    await writable.write(editor.innerHTML);
+                    await writable.close();
+                    await loadWorkspaceTree();
+                    parseDynamicIndex();
+                    hasUnsavedChanges = false;
+                    setSaveState('saved');
                 }
             });
 
@@ -1240,19 +1582,29 @@
 
             colorBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
+                    const range = getActiveOrSavedRange();
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+
                     const color = e.target.getAttribute('data-color');
-                    editor.focus();
                     document.execCommand('styleWithCSS', false, true);
                     document.execCommand('foreColor', false, color);
+                    captureCurrentSelection();
                     notifyContentChanged();
                 });
             });
 
             alignBtns.forEach(btn => {
-                btn.addEventListener('mousedown', (e) => e.preventDefault());
                 btn.addEventListener('click', () => {
+                    const range = getActiveOrSavedRange();
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+
                     const alignCommand = btn.closest('.align-btn').getAttribute('data-align');
                     document.execCommand(alignCommand, false, null);
+                    captureCurrentSelection();
                     notifyContentChanged();
                 });
             });
@@ -1266,70 +1618,7 @@
                 await executeAutoSave();
             });
 
-            // Enhanced Paste Event Handler: Strips external fonts, sizes, colors, & styling
-            editor.addEventListener('paste', function (e) {
-                const clipboardData = e.clipboardData || window.clipboardData;
-                if (!clipboardData) return;
-
-                const items = clipboardData.items;
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    if (item.type.indexOf('image') === 0) {
-                        e.preventDefault();
-                        const file = item.getAsFile();
-                        if (!file) continue;
-
-                        const reader = new FileReader();
-                        reader.onload = function (event) {
-                            editor.focus();
-                            document.execCommand('insertImage', false, event.target.result);
-                            notifyContentChanged();
-                        };
-                        reader.readAsDataURL(file);
-                        return;
-                    }
-                }
-
-                e.preventDefault();
-
-                const rawHtml = clipboardData.getData('text/html');
-                const rawText = clipboardData.getData('text/plain');
-
-                if (rawHtml) {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = rawHtml;
-
-                    const elements = tempDiv.querySelectorAll('*');
-                    elements.forEach(el => {
-                        el.style.fontFamily = '';
-                        el.style.fontSize = '';
-                        el.style.color = '';
-                        el.style.backgroundColor = '';
-                        el.style.lineHeight = '';
-
-                        if (el.getAttribute('style') === '') {
-                            el.removeAttribute('style');
-                        }
-
-                        if (el.tagName.toLowerCase() === 'font') {
-                            el.removeAttribute('face');
-                            el.removeAttribute('size');
-                            el.removeAttribute('color');
-                        }
-                    });
-
-                    document.execCommand('insertHTML', false, tempDiv.innerHTML);
-                } else if (rawText) {
-                    document.execCommand('insertText', false, rawText);
-                }
-
-                notifyContentChanged();
-                clearTimeout(indexDebounceTimer);
-                indexDebounceTimer = setTimeout(() => {
-                    parseDynamicIndex();
-                }, 300);
-            });
-
+            // Diagram Builder Logic (Inserts at exact cursor line)
             let draggedShape = null;
             let dragOffsetX = 0;
             let dragOffsetY = 0;
@@ -1338,23 +1627,19 @@
 
             const shapeResizeObserver = new ResizeObserver(entries => {
                 for (let entry of entries) {
-                    const el = entry.target;
-                    const board = el.closest('.diagram-board');
-                    if (board) {
-                        updateConnections(board.id);
-                    }
+                    const board = entry.target.closest('.diagram-board');
+                    if (board) updateConnections(board.id);
                 }
             });
 
             function createShapeHTML(type, id) {
                 const className = type === 'box' ? 'shape-box' : 'shape-circle';
                 return `<div class="diag-shape ${className}" id="${id}" style="left: 40px; top: 40px;">
-                            <span contenteditable="true">Text</span>
+                            <span contenteditable="true">Step</span>
                         </div>`;
             }
 
             addDiagramBtn.addEventListener('click', () => {
-                editor.focus();
                 const boardId = 'board-' + Date.now();
                 const diagramHtml = `
                 <div class="diagram-board" contenteditable="false" id="${boardId}">
@@ -1376,9 +1661,8 @@
                         </svg>
                         <div class="diag-label-layer" id="labels-${boardId}" style="position:absolute; inset:0; pointer-events:none; z-index:6;"></div>
                     </div>
-                </div><p><br></p>`;
-                document.execCommand('insertHTML', false, diagramHtml);
-                notifyContentChanged();
+                </div><div><br></div>`;
+                insertBlockAtCursor(diagramHtml);
             });
 
             document.addEventListener('click', (e) => {
@@ -1386,13 +1670,9 @@
                     const boardId = e.target.getAttribute('data-board');
                     const canvas = document.getElementById('canvas-' + boardId);
                     const shapeId = 'shape-' + Date.now() + Math.floor(Math.random() * 1000);
-                    const shapeHtml = createShapeHTML(e.target.matches('.add-box') ? 'box' : 'circle', shapeId);
-                    canvas.insertAdjacentHTML('beforeend', shapeHtml);
-
+                    canvas.insertAdjacentHTML('beforeend', createShapeHTML(e.target.matches('.add-box') ? 'box' : 'circle', shapeId));
                     const newShape = document.getElementById(shapeId);
                     if (newShape) shapeResizeObserver.observe(newShape);
-                    const board = document.getElementById(boardId);
-                    if (board) shapeResizeObserver.observe(board);
                     notifyContentChanged();
                 }
 
@@ -1407,14 +1687,11 @@
                 if (e.target.matches('.connect-mode')) {
                     const btn = e.target;
                     const boardId = btn.getAttribute('data-board');
-
                     if (connectingBoardId === boardId) {
                         connectingBoardId = null;
                         connectStartShape = null;
                         btn.classList.remove('active-connect');
-                        document.querySelectorAll('.connect-target-glow').forEach(el => el.classList.remove('connect-target-glow'));
                     } else {
-                        document.querySelectorAll('.connect-mode.active-connect').forEach(el => el.classList.remove('active-connect'));
                         connectingBoardId = boardId;
                         connectStartShape = null;
                         btn.classList.add('active-connect');
@@ -1425,7 +1702,6 @@
             document.addEventListener('mousedown', (e) => {
                 const shape = e.target.closest('.diag-shape');
                 if (!shape) return;
-
                 const board = shape.closest('.diagram-board');
                 if (!board) return;
 
@@ -1445,7 +1721,6 @@
 
                 const rect = shape.getBoundingClientRect();
                 const isResizeClick = (e.clientX - rect.left) > (rect.width - 15) && (e.clientY - rect.top) > (rect.height - 15);
-
                 if (e.target.tagName.toLowerCase() !== 'span' && !isResizeClick) {
                     draggedShape = shape;
                     dragOffsetX = e.clientX - rect.left;
@@ -1456,19 +1731,12 @@
 
             document.addEventListener('mousemove', (e) => {
                 if (!draggedShape) return;
-
                 const canvas = draggedShape.parentElement;
                 const canvasRect = canvas.getBoundingClientRect();
-
-                let newLeft = e.clientX - canvasRect.left - dragOffsetX;
-                let newTop = e.clientY - canvasRect.top - dragOffsetY;
-
-                newLeft = Math.max(0, Math.min(newLeft, canvasRect.width - draggedShape.offsetWidth));
-                newTop = Math.max(0, Math.min(newTop, canvasRect.height - draggedShape.offsetHeight));
-
+                let newLeft = Math.max(0, Math.min(e.clientX - canvasRect.left - dragOffsetX, canvasRect.width - draggedShape.offsetWidth));
+                let newTop = Math.max(0, Math.min(e.clientY - canvasRect.top - dragOffsetY, canvasRect.height - draggedShape.offsetHeight));
                 draggedShape.style.left = newLeft + 'px';
                 draggedShape.style.top = newTop + 'px';
-
                 updateConnections(canvas.closest('.diagram-board').id);
                 notifyContentChanged();
             });
@@ -1481,13 +1749,8 @@
                 const svg = document.getElementById('svg-' + boardId);
                 const labelsLayer = document.getElementById('labels-' + boardId);
                 const lineId = 'line-' + startId + '-' + endId + '-' + Date.now();
-
-                const lineHTML = `<line id="${lineId}" data-start="${startId}" data-end="${endId}" stroke="#475569" stroke-width="2" marker-end="url(#arrow-${boardId})"></line>`;
-                svg.innerHTML += lineHTML;
-
-                const labelHTML = `<div class="diag-label" id="label-${lineId}" contenteditable="true">Link</div>`;
-                labelsLayer.insertAdjacentHTML('beforeend', labelHTML);
-
+                svg.innerHTML += `<line id="${lineId}" data-start="${startId}" data-end="${endId}" stroke="#475569" stroke-width="2" marker-end="url(#arrow-${boardId})"></line>`;
+                labelsLayer.insertAdjacentHTML('beforeend', `<div class="diag-label" id="label-${lineId}" contenteditable="true">&rarr;</div>`);
                 updateConnections(boardId);
                 notifyContentChanged();
             }
@@ -1495,24 +1758,19 @@
             function updateConnections(boardId) {
                 const svg = document.getElementById('svg-' + boardId);
                 if (!svg) return;
-
-                const lines = svg.querySelectorAll('line');
-                lines.forEach(line => {
+                svg.querySelectorAll('line').forEach(line => {
                     const startShape = document.getElementById(line.getAttribute('data-start'));
                     const endShape = document.getElementById(line.getAttribute('data-end'));
                     const label = document.getElementById('label-' + line.id);
-
                     if (startShape && endShape) {
                         const startX = startShape.offsetLeft + (startShape.offsetWidth / 2);
                         const startY = startShape.offsetTop + (startShape.offsetHeight / 2);
                         const endX = endShape.offsetLeft + (endShape.offsetWidth / 2);
                         const endY = endShape.offsetTop + (endShape.offsetHeight / 2);
-
                         line.setAttribute('x1', startX);
                         line.setAttribute('y1', startY);
                         line.setAttribute('x2', endX);
                         line.setAttribute('y2', endY);
-
                         if (label) {
                             label.style.left = ((startX + endX) / 2) + 'px';
                             label.style.top = ((startY + endY) / 2) + 'px';
@@ -1521,75 +1779,27 @@
                 });
             }
 
-            // Export PDF with Table of Contents Injection
+            // Export PDF
             downloadBtn.addEventListener('click', async () => {
                 const originalText = downloadBtn.innerHTML;
                 downloadBtn.innerHTML = 'Exporting...';
                 downloadBtn.disabled = true;
-
                 document.body.classList.add('pdf-exporting');
 
-                const indexItems = parseDynamicIndex() || [];
-
-                const tocBlock = document.createElement('div');
-                tocBlock.id = 'pdf-toc-block';
-
-                let tocHtml = `
-                    <div style="font-family: 'Inter', sans-serif; margin-bottom: 24px; padding: 18px 22px; background: rgba(248, 250, 252, 0.95); border: 2px solid #cbd5e1; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                        <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-                            <span>📋 Document Index & Table of Contents</span>
-                            <span style="font-size: 11px; font-weight: 600; color: #3b82f6; background: #eff6ff; padding: 2px 8px; border-radius: 12px;">${indexItems.length} Sections</span>
-                        </div>
-                `;
-
-                if (indexItems.length === 0) {
-                    tocHtml += `<div style="font-size: 12px; color: #64748b; font-style: italic;">No section headings defined in document.</div>`;
-                } else {
-                    tocHtml += `<ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #1e293b; line-height: 1.6;">`;
-                    indexItems.forEach((item) => {
-                        tocHtml += `<li style="margin-bottom: 6px; font-weight: 700; color: #1d4ed8;">${item.title}`;
-                        if (item.subs && item.subs.length > 0) {
-                            tocHtml += `<ul style="margin-top: 4px; margin-bottom: 4px; padding-left: 20px; font-weight: 500; color: #334155; list-style-type: circle;">`;
-                            item.subs.forEach(sub => {
-                                tocHtml += `<li style="margin-bottom: 2px;">${sub.title}</li>`;
-                            });
-                            tocHtml += `</ul>`;
-                        }
-                        tocHtml += `</li>`;
-                    });
-                    tocHtml += `</ol>`;
-                }
-                tocHtml += `</div>`;
-
-                tocBlock.innerHTML = tocHtml;
-
-                editor.insertBefore(tocBlock, editor.firstChild);
-
                 const opt = {
-                    margin: [10, 0, 10, 0],
-                    filename: `${activeDocTitle.innerText.replace('.html', '')}_Export.pdf`,
+                    margin: [8, 0, 8, 0],
+                    filename: `${activeDocTitle.innerText.replace('.html', '')}_Notes.pdf`,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: {
-                        scale: 2,
-                        scrollY: 0,
-                        scrollX: 0,
-                        useCORS: true,
-                        logging: false
-                    },
+                    html2canvas: { scale: 2, scrollY: 0, scrollX: 0, useCORS: true, logging: false },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
-                editor.blur();
-
                 try {
                     await html2pdf().set(opt).from(pdfTarget).save();
-                    showMessage("Exported PDF with Table of Contents successfully!");
+                    showMessage("Exported PDF successfully!");
                 } catch (err) {
                     showMessage("Failed to export PDF: " + err.message, true);
                 } finally {
-                    if (tocBlock.parentNode) {
-                        tocBlock.parentNode.removeChild(tocBlock);
-                    }
                     document.body.classList.remove('pdf-exporting');
                     downloadBtn.innerHTML = originalText;
                     downloadBtn.disabled = false;
