@@ -14,11 +14,11 @@
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- Google Fonts for Kalam Handwriting & Inter UI -->
+    <!-- Google Fonts for Kalam, Patrick Hand, Fira Code & Inter UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <style>
@@ -99,7 +99,7 @@
             z-index: 10;
         }
 
-        /* Lined Paper Background with Kalam Font */
+        /* Lined Paper Background with Default Kalam Font */
         .paper-bg {
             background-color: var(--paper-bg);
             background-image:
@@ -124,6 +124,7 @@
             min-height: 100%;
             white-space: pre-wrap;
             word-wrap: break-word;
+            transition: font-family 0.15s ease-in-out;
         }
 
         #editor img {
@@ -525,7 +526,7 @@
                     </div>
                     <div class="truncate" title="Active File Relative Path">
                         <span class="text-slate-500">Path:</span>
-                        <span id="currentFullPathDisplay" class="text-amber-300">/</span >
+                        <span id="currentFullPathDisplay" class="text-amber-300">/</span>
                     </div>
                     <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800/80 font-sans">
                         <span id="workspaceStatsText">0 files</span>
@@ -534,7 +535,7 @@
                 </div>
             </div>
 
-            <!-- Saved Workspace Reconnect Prompt Banner (Shown when browser requires 1-click permission on reload) -->
+            <!-- Saved Workspace Reconnect Prompt Banner -->
             <div id="reconnectBanner" class="p-3 bg-blue-950/60 border-b border-blue-800/60 hidden">
                 <div class="text-xs font-bold text-blue-200 mb-1 flex items-center gap-1.5">
                     <span>📂</span>
@@ -601,7 +602,7 @@
         <header id="main-toolbar"
             class="editor-toolbar flex-shrink-0 px-5 py-2.5 flex flex-col gap-2">
 
-            <!-- Top Row: File Title, Connected Path Pill, Pen Colors, Marker Highlights, Alignment & Actions -->
+            <!-- Top Row: File Title, Connected Path Pill, Pen Colors, Marker Highlights, Fonts, Alignment & Actions -->
             <div class="flex flex-wrap justify-between items-center gap-3">
                 <div class="flex items-center gap-3 flex-wrap">
                     <!-- Active File Title Display, Path Breadcrumb & Dynamic Animated Save Status Badge -->
@@ -640,6 +641,16 @@
                         <button type="button" class="marker-btn w-5 h-5 rounded-md bg-blue-300 border border-blue-400 hover:scale-110 transition-transform shadow-sm" data-marker="marker-blue" title="Blue Marker Highlight"></button>
                         <button type="button" class="marker-btn w-5 h-5 rounded-md bg-purple-300 border border-purple-400 hover:scale-110 transition-transform shadow-sm" data-marker="marker-purple" title="Purple Marker Highlight"></button>
                         <button type="button" id="clearHighlightBtn" class="px-1.5 py-0.5 text-[10px] font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300 rounded transition-colors" title="Remove Highlight from Selected Text">Eraser</button>
+                    </div>
+
+                    <!-- Editor Font Selector Dropdown -->
+                    <div class="flex items-center gap-1.5 border-l border-slate-200 pl-2.5">
+                        <label for="fontSelect" class="text-[10px] font-bold uppercase text-slate-400">Font:</label>
+                        <select id="fontSelect"
+                            class="bg-white border border-slate-300 text-slate-700 text-xs font-medium rounded-md px-2 py-1 outline-none hover:border-slate-400 focus:ring-1 focus:ring-blue-500 cursor-pointer transition-colors shadow-sm">
+                            <option value="'Kalam', cursive" selected>Kalam (Default)</option>
+                            <option value="'Patrick Hand', cursive">Patrick Hand</option>
+                        </select>
                     </div>
 
                     <!-- Text Alignment Commands -->
@@ -773,6 +784,7 @@
             const DEFAULT_EDITOR_HTML = editor.innerHTML;
             const DEFAULT_DOC_TITLE = 'SpringBoot_Notes.html';
 
+            const fontSelect = document.getElementById('fontSelect');
             const colorBtns = document.querySelectorAll('.color-btn');
             const markerBtns = document.querySelectorAll('.marker-btn');
             const clearHighlightBtn = document.getElementById('clearHighlightBtn');
@@ -830,6 +842,7 @@
             const LS_WORKSPACE_PATH_KEY = 'notebook_pro_workspace_path';
             const LS_LAST_OPENED_FILE_KEY = 'notebook_pro_last_file';
             const LS_CONNECTED_AT_KEY = 'notebook_pro_connected_at';
+            const LS_EDITOR_FONT_KEY = 'notebook_pro_editor_font';
             const IDB_NAME = 'NotebookProWorkspaceDB';
             const IDB_STORE = 'handles';
             const IDB_HANDLE_KEY = 'workspaceDirectoryHandle';
@@ -844,6 +857,27 @@
             let savedFadeTimeout = null;
 
             const AUTO_SAVE_DELAY = 1000;
+
+            // =========================================================================
+            // FONT FAMILY CONTROLLER (Kalam Default & Patrick Hand)
+            // =========================================================================
+            if (fontSelect) {
+                const savedFont = localStorage.getItem(LS_EDITOR_FONT_KEY);
+                if (savedFont) {
+                    fontSelect.value = savedFont;
+                    editor.style.fontFamily = savedFont;
+                } else {
+                    editor.style.fontFamily = "'Kalam', cursive";
+                    fontSelect.value = "'Kalam', cursive";
+                }
+
+                fontSelect.addEventListener('change', (e) => {
+                    const selectedFont = e.target.value;
+                    editor.style.fontFamily = selectedFont;
+                    localStorage.setItem(LS_EDITOR_FONT_KEY, selectedFont);
+                    notifyContentChanged();
+                });
+            }
 
             // =========================================================================
             // PERSISTENT STORAGE ENGINE (localStorage + IndexedDB for DirectoryHandle)
@@ -864,7 +898,6 @@
             }
 
             async function saveWorkspaceSessionToStorage(dirHandle, activeFileName = null) {
-                // 1. Save path metadata in browser localStorage
                 const folderPathName = `/${dirHandle.name}`;
                 localStorage.setItem(LS_WORKSPACE_PATH_KEY, folderPathName);
                 localStorage.setItem(LS_CONNECTED_AT_KEY, new Date().toISOString());
@@ -872,7 +905,6 @@
                     localStorage.setItem(LS_LAST_OPENED_FILE_KEY, activeFileName);
                 }
 
-                // 2. Save directory handle in IndexedDB so it can be reloaded on next app launch
                 try {
                     const db = await openWorkspaceDB();
                     await new Promise((resolve, reject) => {
@@ -917,7 +949,6 @@
                 }
             }
 
-            // Update Connected Path UI Details in Sidebar and Top Header
             function updateConnectedPathUI(fileCount = 0, dirCount = 0) {
                 const savedPath = localStorage.getItem(LS_WORKSPACE_PATH_KEY);
                 const lastFile = currentFileHandle ? currentFileHandle.name : '';
@@ -947,7 +978,6 @@
                 }
             }
 
-            // Show Default Note when no workspace is connected
             function showDefaultNote() {
                 workspaceHandle = null;
                 currentFileHandle = null;
@@ -960,7 +990,6 @@
                 setSaveState('unsaved');
             }
 
-            // Activate a connected workspace handle and load all files
             async function activateWorkspaceHandle(dirHandle, autoOpenFile = true) {
                 workspaceHandle = dirHandle;
                 await saveWorkspaceSessionToStorage(dirHandle);
@@ -991,11 +1020,9 @@
                 setSaveState(hasUnsavedChanges ? 'unsaved' : 'saved');
             }
 
-            // Check localStorage & IndexedDB on Startup
             async function checkSavedWorkspaceOnStartup() {
                 const savedPath = localStorage.getItem(LS_WORKSPACE_PATH_KEY);
                 if (!savedPath) {
-                    // No saved path in localStorage -> show default note
                     showDefaultNote();
                     return;
                 }
@@ -1012,7 +1039,6 @@
                         await activateWorkspaceHandle(savedHandle, true);
                         showMessage(`Restored workspace "${savedPath}"`);
                     } else {
-                        // Browser requires a user click to grant permission to the saved handle
                         savedPathPreview.innerText = savedPath;
                         reconnectBanner.classList.remove('hidden');
                         showDefaultNote();
@@ -1023,7 +1049,6 @@
                 }
             }
 
-            // Resume button when browser asks to re-verify saved folder permission
             resumeWorkspaceBtn.addEventListener('click', async () => {
                 const savedHandle = await getSavedDirectoryHandleFromStorage();
                 if (!savedHandle) {
@@ -1047,7 +1072,6 @@
                 }
             });
 
-            // Forget / Disconnect Workspace
             async function disconnectWorkspace() {
                 await clearWorkspaceSessionFromStorage();
                 reconnectBanner.classList.add('hidden');
@@ -1238,6 +1262,8 @@
                 });
             });
 
+            // =========================================================================
+            // SAVE STATE & AUTO-SAVE
             // =========================================================================
 
             function setSaveState(state) {
@@ -1820,7 +1846,6 @@
                     editor.innerHTML = contents;
                     savedRange = null;
 
-                    // Save active file name in localStorage and update path showcase
                     localStorage.setItem(LS_LAST_OPENED_FILE_KEY, fileHandle.name);
                     await loadWorkspaceTree();
 
